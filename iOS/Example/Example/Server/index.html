@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <script type="text/javascript" src="ext-jsbridge.js"></script>
+    <title>ExtJSBridge</title>
+</head>
+<body>
+    <div id = "status">-1</div>
+    <button onclick = "request()" style = "font-size: 18px;">Request</button>
+    <button onclick = "check()" style = "font-size: 18px;">Check</button>
+    <button onclick = "subscribe()" style = "font-size: 18px;">Subscribe</button>
+    <button onclick = "unsubscribe()" style = "font-size: 18px;">Unsubscribe</button>
+    <button onclick = "notify()" style = "font-size: 18px;">Notify</button>
+    <button onclick = "alertShow()" style = "font-size: 18px;">AlertShow</button>
+    <script>
+        var value =-1;
+        function request() {
+            ext.invoke("Networking", "post", {
+                url:"http://baidu.com",
+                onSuccess:function(res) {
+                    console.log("res:"+res);
+                },
+                onFail:function(err) {
+                    console.log("err:"+err);
+                }
+            });
+        }
+        function check() {
+            ext.invoke("Networking", "status", {
+                onComplete:function(res) {
+                    document.getElementById('status').innerHTML = ''+res;
+                    console.log("status" + res);
+                }
+            });
+        }
+        function subscribe() {
+            ext.invoke("Networking", "onStateChange", new ExtSubscribe((res) => {document.getElementById('status').innerHTML = ''+res; console.log("onStateChange res:" + res);}));
+        }
+        function unsubscribe() {
+            document.getElementById('status').innerHTML = "-1"
+            ext.invoke("Networking", "onStateChange", new ExtUnsubscribe());
+        }
+        function notify() {
+            ext.invoke("notify", "post", {"name":"NotifyFromJavascript","value":++value});
+        }
+        function alertShow() {
+            ext.invoke("alert", "show", {"title":"Test Title","message":"Lorem ipsum dolor sit amet, ligula suspendisse nulla pretium, rhoncus tempor fermentum, enim integer ad vestibulum volutpat."});
+        }
+    </script>
+</body>
+</html>
