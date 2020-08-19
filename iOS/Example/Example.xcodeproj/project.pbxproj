@@ -13,7 +13,7 @@
 		B710ADE824E51BF800AFE4BE /* Networking.m in Sources */ = {isa = PBXBuildFile; fileRef = B710ADE724E51BF800AFE4BE /* Networking.m */; };
 		B710ADEB24E5254500AFE4BE /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B710ADEA24E5254500AFE4BE /* WebViewController.m */; };
 		B710ADF424E5288600AFE4BE /* TradeExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B710ADF324E5288600AFE4BE /* TradeExecutor.m */; };
-		B710ADF624E5363F00AFE4BE /* ext-jsbridge.js in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF524E5363F00AFE4BE /* ext-jsbridge.js */; };
+		B710ADF624E5363F00AFE4BE /* ext-bridge-runtime.js in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF524E5363F00AFE4BE /* ext-bridge-runtime.js */; };
 		B710ADF824E5365500AFE4BE /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF724E5365500AFE4BE /* index.html */; };
 		B76A77C624EAB3A300D03909 /* NotifyExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77C524EAB3A300D03909 /* NotifyExecutor.m */; };
 		B76A77CC24EB766600D03909 /* AlertTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77CB24EB766600D03909 /* AlertTest.m */; };
@@ -61,7 +61,7 @@
 		B710ADEA24E5254500AFE4BE /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		B710ADF224E5288600AFE4BE /* TradeExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TradeExecutor.h; sourceTree = "<group>"; };
 		B710ADF324E5288600AFE4BE /* TradeExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TradeExecutor.m; sourceTree = "<group>"; };
-		B710ADF524E5363F00AFE4BE /* ext-jsbridge.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "ext-jsbridge.js"; sourceTree = "<group>"; };
+		B710ADF524E5363F00AFE4BE /* ext-bridge-runtime.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "ext-bridge-runtime.js"; sourceTree = "<group>"; };
 		B710ADF724E5365500AFE4BE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B76A77C424EAB3A300D03909 /* NotifyExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotifyExecutor.h; sourceTree = "<group>"; };
 		B76A77C524EAB3A300D03909 /* NotifyExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotifyExecutor.m; sourceTree = "<group>"; };
@@ -199,7 +199,7 @@
 		B76A77DC24EBBCD800D03909 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				B710ADF524E5363F00AFE4BE /* ext-jsbridge.js */,
+				B710ADF524E5363F00AFE4BE /* ext-bridge-runtime.js */,
 				B710ADF724E5365500AFE4BE /* index.html */,
 			);
 			path = Server;
@@ -381,7 +381,7 @@
 				B780B94D24E3FB0E003E37A4 /* LaunchScreen.storyboard in Resources */,
 				B780B94A24E3FB0E003E37A4 /* Assets.xcassets in Resources */,
 				B780B94824E3FB0B003E37A4 /* Main.storyboard in Resources */,
-				B710ADF624E5363F00AFE4BE /* ext-jsbridge.js in Resources */,
+				B710ADF624E5363F00AFE4BE /* ext-bridge-runtime.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

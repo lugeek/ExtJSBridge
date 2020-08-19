@@ -33,8 +33,63 @@ class ExtUnsubscribe {
         return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/2";
     };
 };
+//do not use
+class ExtMessage {
+    constructor(target, action, params) {
+        this.messageId = ext.nextId();
+        this.target = target;
+        this.action = action;
+        this.params = params;
+        this.timestamp = new Date().getTime();
+        this.resolvedValue = null;
+        this.needWaitCallback = false;
+        if (typeof params == 'boolean') {
+            this.valueType = "N";
+            if (params) {
+                this.resolvedValue = 1;
+            } else {
+                this.resolvedValue = 0;
+            }
+        } else if (typeof params == 'number') {
+            this.valueType = "N";
+            this.resolvedValue = params;
+        } else if (typeof params == 'null' || typeof params == 'undefined') {
+            this.valueType = "S";
+            this.resolvedValue = "";
+        } else if (typeof params == 'string') {
+            this.valueType = "S";
+            this.resolvedValue = encodeURIComponent(params);
+        } else if (params instanceof Array) {
+            this.valueType = "E";
+            this.resolvedValue = encodeURIComponent(params);
+        } else if (params instanceof Array) {
+            this.valueType = "A";
+            this.resolvedValue = encodeURIComponent(JSON.stringify(params));
+        } else {
+            this.valueType = "O";
+            let dic = {};
+            for(let key in this.params) {
+                let item = this.params[key];
+                if (typeof item == 'null' || typeof item == 'undefined' || typeof item == 'boolean' || typeof item == 'string' || typeof item == 'number') {
+                    dic[key] = this.params[key];
+                    continue;
+                }
+                if (key == 'onSuccess' || key == 'onFail' || key == 'onComplete') {
+                    if (typeof item != 'function') {
+                        continue;
+                    }
+                    this.needWaitCallback = true;
+                }
+            }
+            this.resolvedValue = encodeURIComponent(JSON.stringify(dic));
+        }
+    };
+    resolve() {
+        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/0/" + this.valueType + "/" + this.resolvedValue;
+    };
+};
 (function(){
-    let ext = {
+    let extBridge = {
         //never overwrite
         _messageId: -1,
         //normal message
@@ -61,23 +116,43 @@ class ExtUnsubscribe {
                 params.target = target;
                 params.action = action;
                 this._subscriberMap.set(this._generate(target, action, ""), params);
-                window.webkit.messageHandlers.ext.postMessage(params.resolve());
+                if (this._isIOS) {
+                    window.webkit.messageHandlers.ext.postMessage(params.resolve());
+                } else if(this._isAndroid) {
+                    window.ext.postMessage(params.resolve());
+                }
             } else if (params instanceof ExtUnsubscribe) {
                 params.target = target;
                 params.action = action;
                 var obj = this._subscriberMap.get[this._generate(target, action, "")];
                 if (obj) {
                     this._subscriberMap.delete(this._generate(target, action, ""));
-                    window.webkit.messageHandlers.ext.postMessage(params.resolve());
+                    if (this._isIOS) {
+                        window.webkit.messageHandlers.ext.postMessage(params.resolve());
+                    } else if(this._isAndroid) {
+                        window.ext.postMessage(params.resolve());
+                    }
                 }
             } else {
                 let message = new ExtMessage(target, action, params);
                 if (message.needWaitCallback) {
                     this._messageMap.set(this._generate(target, action, message.messageId), message);
                 }
-                window.webkit.messageHandlers.ext.postMessage(message.resolve());
+                if (this._isIOS) {
+                    window.webkit.messageHandlers.ext.postMessage(message.resolve());
+                } else if(this._isAndroid) {
+                    window.ext.postMessage(message.resolve());
+                }
             }
         },
+         isAndroid : function () {
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+         },
+         isIOS : function () {
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+         },
         _parse : function (string) {
             var resolvedMsg = {};
             let array = string.split("/");
@@ -252,61 +327,28 @@ class ExtUnsubscribe {
             return true;
         }
     };
-    class ExtMessage {
-        constructor(target, action, params) {
-            this.messageId = ext.nextId();
-            this.target = target;
-            this.action = action;
-            this.params = params;
-            this.timestamp = new Date().getTime();
-            this.resolvedValue = null;
-            this.needWaitCallback = false;
-            if (typeof params == 'boolean') {
-                this.valueType = "N";
-                if (params) {
-                    this.resolvedValue = 1;
-                } else {
-                    this.resolvedValue = 0;
-                }
-            } else if (typeof params == 'number') {
-                this.valueType = "N";
-                this.resolvedValue = params;
-            } else if (typeof params == 'null' || typeof params == 'undefined') {
-                this.valueType = "S";
-                this.resolvedValue = "";
-            } else if (typeof params == 'string') {
-                this.valueType = "S";
-                this.resolvedValue = encodeURIComponent(params);
-            } else if (params instanceof Array) {
-                this.valueType = "E";
-                this.resolvedValue = encodeURIComponent(params);
-            } else if (params instanceof Array) {
-                this.valueType = "A";
-                this.resolvedValue = encodeURIComponent(JSON.stringify(params));
-            } else {
-                this.valueType = "O";
-                let dic = {};
-                for(let key in this.params) {
-                    let item = this.params[key];
-                    if (typeof item == 'null' || typeof item == 'undefined' || typeof item == 'boolean' || typeof item == 'string' || typeof item == 'number') {
-                        dic[key] = this.params[key];
-                        continue;
-                    }
-                    if (key == 'onSuccess' || key == 'onFail' || key == 'onComplete') {
-                        if (typeof item != 'function') {
-                            continue;
-                        }
-                        this.needWaitCallback = true;
-                    }
-                }
-                this.resolvedValue = encodeURIComponent(JSON.stringify(dic));
-            }
-        };
-        resolve() {
-            return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/0/" + this.valueType + "/" + this.resolvedValue;
-        };
-    };
     if (window.ext == null || window.ext == undefined) {
-        window.ext = ext;
+        window.ext = extBridge;
+        extBridge._isIOS = extBridge.isIOS();
+        extBridge._isAndroid = extBridge.isAndroid();
+    } else {
+        window.ext._messageId = extBridge._messageId;
+        window.ext._messageMap = extBridge._messageMap;
+        window.ext._subscriberMap = extBridge._subscriberMap;
+        window.ext._errorCodeMap = extBridge._errorCodeMap;
+        window.ext._isIOS = extBridge.isIOS();
+        window.ext._isAndroid = extBridge.isAndroid();
+        window.ext.nextId = extBridge.nextId;
+        window.ext.invoke = extBridge.invoke;
+        window.ext.isIOS = extBridge.isIOS;
+        window.ext.isAndroid = extBridge.isAndroid;
+        window.ext._parse = extBridge._parse;
+        window.ext._convert = extBridge._convert;
+        window.ext._generate = extBridge._generate;
+        window.ext._validate = extBridge._validate;
+        window.ext._d = extBridge._d;
+        window.ext._s = extBridge._s;
+        window.ext._f = extBridge._f;
+        window.ext._o = extBridge._o;
     }
 })();
