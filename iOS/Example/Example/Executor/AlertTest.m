@@ -16,7 +16,7 @@
         NSString *msg = message.value[@"message"];
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [message invokeCallbackWithParams:@(YES) complete:nil];
+            [message callbackWithParams:@(YES) complete:nil];
         }];
         [alertController addAction:cancel];
         UIResponder *responder = message.webView;
@@ -29,7 +29,7 @@
         if (responder) {
             [(UIViewController *)responder presentViewController:alertController animated:YES completion:nil];
         } else {
-            [message invokeCallbackWithParams:@(NO) complete:nil];
+            [message callbackWithParams:@(NO) complete:nil];
         }
     }
 }

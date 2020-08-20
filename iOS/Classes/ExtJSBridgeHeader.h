@@ -11,5 +11,6 @@
 #import "ExtJSBridge.h"
 #import "ExtJSExecutorProtocol.h"
 #import "WKWebView+ExtJSBridge.h"
+#import "NSObject+ExtJSBridge.h"
 
 #endif /* ExtJSBridgeHeader_h */

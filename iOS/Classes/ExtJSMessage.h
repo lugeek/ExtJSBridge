@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, ExtJSCallbackFailedReason) {
 
 //method should be called on main thread
 //params must be kindof NSNumber(BOOL/Integer/Float), NSString,NSArray,NSDictionary,NSError
-- (void)invokeCallbackWithParams:(id)params complete:(void(^_Nullable)(BOOL success, ExtJSCallbackFailedReason reason))complete;
+- (void)callbackWithParams:(id)params complete:(void(^_Nullable)(BOOL success, ExtJSCallbackFailedReason reason))complete;
 
 + (NSDictionary *)parseRawString:(NSString *)parseRawString;
 

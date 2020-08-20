@@ -33,12 +33,12 @@
     if ([message.action isEqualToString:@"createOrder"]) {
         NSArray *array = message.value[@"list"];
         NSString *orderId = [self.trade createOrderWithProductIds:array];
-        [message invokeCallbackWithParams:orderId complete:nil];
+        [message callbackWithParams:orderId complete:nil];
         return;
     }
     if ([message.action isEqualToString:@"pay"]) {
         [self.trade payForOrderId:message.value complete:^{
-            [message invokeCallbackWithParams:@(true) complete:nil];
+            [message callbackWithParams:@(true) complete:nil];
         }];
     }
 }

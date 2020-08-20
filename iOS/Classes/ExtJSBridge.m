@@ -6,6 +6,7 @@
 //
 
 #import "ExtJSBridge.h"
+#import "NSObject+ExtJSBridge.h"
 
 @interface ExtJSBridge() {
     dispatch_queue_t _searialQueue;
@@ -70,13 +71,19 @@
             if (!passed) {
                 return;
             }
-            id<ExtJSExecutorProtocol> executor = [strongSelf.builder buildExecutorWithMessage:jsMessage];
+            NSObject<ExtJSExecutorProtocol> *executor = [strongSelf.builder buildExecutorWithMessage:jsMessage];
             if (!executor) {
                 return;
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [executor ext_handleJSMessage:jsMessage];
-            });
+            if (jsMessage.kind == ExtJSMessageKindSubscribe) {
+                [executor ext_subscribeWithJSMessage:jsMessage];
+            } else if (jsMessage.kind == ExtJSMessageKindUnsubscribe) {
+                [executor ext_unsubscribeWithJSMessage:jsMessage];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [executor ext_handleJSMessage:jsMessage];
+                });
+            }
         }];
     });
 }

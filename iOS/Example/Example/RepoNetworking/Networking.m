@@ -8,6 +8,7 @@
 
 #import "Networking.h"
 #import <ExtJSBridge/ExtJSExecutorProtocol.h>
+#import <ExtJSBridge/NSObject+ExtJSBridge.h>
 
 @interface Networking()
 
@@ -16,7 +17,6 @@
 @property (nonatomic, strong) NSMutableArray *deviceList;
 
 @property (nonatomic, strong) NSMutableArray *listeners;
-@property (nonatomic, strong) NSMutableDictionary *webListenerMap;
 
 @end
 
@@ -28,7 +28,6 @@
         self.manager = [[AFHTTPSessionManager alloc] init];
         self.reachableManager = [AFNetworkReachabilityManager manager];
         self.listeners = [NSMutableArray array];
-        self.webListenerMap = [NSMutableDictionary dictionary];
         [self monitorNetwrokStatusChange];
     }
     return self;
@@ -43,14 +42,7 @@
                 [listener didChangedNetworkingStatus:status];
             }
         }
-        for (NSString *key in weakSelf.webListenerMap) {
-            ExtJSMessage *listener = weakSelf.webListenerMap[key];
-            [listener invokeCallbackWithParams:@(status) complete:^(BOOL success, ExtJSCallbackFailedReason reason) {
-                if (reason == ExtJSCallbackFailedReasonWebViewDestroyed) {
-                    [weakSelf.listeners removeObject:listener];
-                }
-            }];
-        }
+        [weakSelf ext_callBackToJSSubscriberWithAction:@"onStateChange" params:@(status)];
     }];
     [self.reachableManager startMonitoring];
 }
@@ -60,29 +52,17 @@
 }
 
 - (void)ext_handleJSMessage:(ExtJSMessage *)message {
-    if (message.kind == ExtJSMessageKindNormal) {
-        if ([message.action isEqualToString:@"post"]) {
-            [self post:message.value successBlock:^(id  _Nonnull result) {
-                [message invokeCallbackWithParams:result complete:nil];
-            } errorBlock:^(NSError * _Nonnull error) {
-                [message invokeCallbackWithParams:error complete:nil];
-            }];
-            return;
-        }
-        if ([message.action isEqualToString:@"status"]) {
-            [message invokeCallbackWithParams:@(self.reachableManager.networkReachabilityStatus) complete:nil];
-            return;
-        }
-    } else {
-        if (message.kind == ExtJSMessageKindSubscribe && [message.action isEqualToString:@"onStateChange"]) {
-            NSLog(@"%@", message.uniqueSubscribeKey);
-            self.webListenerMap[message.uniqueSubscribeKey] = message;
-            return;
-        }
-        if (message.kind == ExtJSMessageKindUnsubscribe && [message.action isEqualToString:@"onStateChange"]) {
-            self.webListenerMap[message.uniqueSubscribeKey] = nil;
-            return;
-        }
+    if ([message.action isEqualToString:@"post"]) {
+        [self post:message.value successBlock:^(id  _Nonnull result) {
+            [message callbackWithParams:result complete:nil];
+        } errorBlock:^(NSError * _Nonnull error) {
+            [message callbackWithParams:error complete:nil];
+        }];
+        return;
+    }
+    if ([message.action isEqualToString:@"status"]) {
+        [message callbackWithParams:@(self.reachableManager.networkReachabilityStatus) complete:nil];
+        return;
     }
 }
 

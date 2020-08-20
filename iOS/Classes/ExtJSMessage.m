@@ -88,7 +88,7 @@ NSString * const ExtJSValueTypeError = @"E";
 }
 
 #pragma mark - public
-- (void)invokeCallbackWithParams:(id)params complete:(void(^)(BOOL success, ExtJSCallbackFailedReason reason))complete {
+- (void)callbackWithParams:(id)params complete:(void(^)(BOOL success, ExtJSCallbackFailedReason reason))complete {
     dispatch_async(self.callbackQueue, ^{
         if (self.kind == ExtJSMessageKindUnsubscribe) {
             dispatch_async(dispatch_get_main_queue(), ^{
