@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <AFNetworking/AFNetworking.h>
-#import <ExtJSBridge/ExtJSBridge.h>
+#import <ExtJSBridge/ExtJSBridgeHeader.h>
 
 @protocol NetworkingListenerProtocol <NSObject>
 
@@ -18,7 +18,7 @@
 @end
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Networking : NSObject<ExtJSExecutorProtocol>
+@interface Networking : ExtJSExecutor
 
 - (void)post:(NSDictionary *)params successBlock:(void(^)(id result))successBlock errorBlock:(void(^)(NSError *error))errorBlock;
 

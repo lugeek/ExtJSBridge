@@ -8,12 +8,22 @@
 
 #import "ViewController.h"
 #import "WebViewController.h"
+#import "AlertExecutor.h"
+#import "TradeExecutor.h"
+#import "Networking.h"
+#import "NotifyExecutor.h"
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openWebVC)]];
+    
+    [ExtJSBridge registExecutorClass:[AlertExecutor class]];
+    [ExtJSBridge registExecutorClass:[TradeExecutor class]];
+    [ExtJSBridge registExecutorClass:[Networking class]];
+    [ExtJSBridge registExecutorClass:[NotifyExecutor class]];
+    
 }
 
 - (void)openWebVC {

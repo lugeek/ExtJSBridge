@@ -10,11 +10,9 @@
 #import <WebKit/WebKit.h>
 #import <ExtJSBridge/ExtJSBridgeHeader.h>
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "GeneralBuilder.h"
 #import "GeneralSecurity.h"
-#import "AlertTest.h"
 
-@interface WebViewController ()
+@interface WebViewController ()<WKUIDelegate>
 
 @property (nonatomic, strong) WKWebView *webView;
 
@@ -25,10 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:[WKWebViewConfiguration new]];
-    ExtJSBridge *bridge = [ExtJSBridge new];
-    bridge.builder = [GeneralBuilder new];
-    bridge.security = [GeneralSecurity new];
-    [self.webView ext_connectToBridge:bridge];
+    [self.webView ext_initializeBridgeWithName:@"ext"];
     [self.view addSubview:self.webView];
     NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"]];
     [self.webView loadFileURL:url allowingReadAccessToURL:url];
@@ -48,5 +43,11 @@
     }];
     [alertController addAction:cancel];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
+    completionHandler(@"abc");
+    
 }
 @end

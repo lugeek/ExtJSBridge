@@ -9,8 +9,8 @@
 
 @implementation ExtJSSecurity
 
-- (void)verifyMessage:(ExtJSMessage *)message complete:(void(^)(BOOL passed))complete {
-    complete(YES);
+- (BOOL)verifyMessage:(ExtJSMessage *)message {
+    return YES;
 }
 
 @end

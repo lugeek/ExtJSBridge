@@ -15,10 +15,15 @@
     <button onclick = "unsubscribe()" style = "font-size: 18px;">Unsubscribe</button>
     <button onclick = "notify()" style = "font-size: 18px;">Notify</button>
     <button onclick = "alertShow()" style = "font-size: 18px;">AlertShow</button>
+    <button onclick = "promptTest()" style = "font-size: 18px;">Prompt</button>
     <script>
         var value =-1;
+        function promptTest() {
+            let a = ext.invoke("notify", "post", {"name":"NotifyFromJavascript","value":++value});
+            console.log(a+"111");
+        }
         function request() {
-            ext.invoke("Networking", "post", {
+            ext.invoke("network", "post", {
                 url:"http://baidu.com",
                 onSuccess:function(res) {
                     console.log("res:"+res);
@@ -29,7 +34,7 @@
             });
         }
         function check() {
-            ext.invoke("Networking", "status", {
+            ext.invoke("network", "status", {
                 onComplete:function(res) {
                     document.getElementById('status').innerHTML = ''+res;
                     console.log("status" + res);
@@ -37,14 +42,14 @@
             });
         }
         function subscribe() {
-            ext.invoke("Networking", "onStateChange", new ExtSubscribe((res) => {document.getElementById('status').innerHTML = ''+res; console.log("onStateChange res:" + res);}));
+            ext.invoke("network", "onStateChange", new ExtSubscribe((res) => {document.getElementById('status').innerHTML = ''+res; console.log("onStateChange res:" + res);}));
         }
         function unsubscribe() {
             document.getElementById('status').innerHTML = "-1"
-            ext.invoke("Networking", "onStateChange", new ExtUnsubscribe());
+            ext.invoke("network", "onStateChange", new ExtUnsubscribe());
         }
         function notify() {
-            ext.invoke("notify", "post", {"name":"NotifyFromJavascript","value":++value});
+            ext.invoke("notify", "syncPost", {"name":"NotifyFromJavascript","value":++value});
         }
         function alertShow() {
             ext.invoke("alert", "show", {"title":"Test Title","message":"Lorem ipsum dolor sit amet, ligula suspendisse nulla pretium, rhoncus tempor fermentum, enim integer ad vestibulum volutpat."});

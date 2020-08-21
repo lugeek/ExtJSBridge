@@ -1,5 +1,5 @@
 /**
- * messageKind  0:normal,1:subscribe,2:unsubscribe
+ * messageKind  0:normal-sync,1:normal-async,2:subscribe,3:unsubscribe
  *
  * message format
  * /target/action/messageId/timestamp/messageKind/valueType/value
@@ -16,16 +16,18 @@ class ExtSubscribe {
         this.messageId = ext.nextId();
         this.timestamp = new Date().getTime();
         this.handler = handler;
+        this.isSync = true;
         this.target = null;
         this.action = null;
     };
     resolve() {
-        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/1";
+        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/2";
     };
 };
 class ExtUnsubscribe {
     constructor() {
         this.timestamp = new Date().getTime();
+        this.isSync = true;
         this.target = null;
         this.action = null;
     };
@@ -39,10 +41,10 @@ class ExtMessage {
         this.messageId = ext.nextId();
         this.target = target;
         this.action = action;
+        this.isSync = true;
         this.params = params;
         this.timestamp = new Date().getTime();
         this.resolvedValue = null;
-        this.needWaitCallback = false;
         if (typeof params == 'boolean') {
             this.valueType = "N";
             if (params) {
@@ -70,22 +72,19 @@ class ExtMessage {
             let dic = {};
             for(let key in this.params) {
                 let item = this.params[key];
+                if ((key == 'onSuccess' || key == 'onFail' || key == 'onComplete') && typeof item == 'function') {
+                    this.isSync = false;
+                }
                 if (typeof item == 'null' || typeof item == 'undefined' || typeof item == 'boolean' || typeof item == 'string' || typeof item == 'number') {
                     dic[key] = this.params[key];
                     continue;
-                }
-                if (key == 'onSuccess' || key == 'onFail' || key == 'onComplete') {
-                    if (typeof item != 'function') {
-                        continue;
-                    }
-                    this.needWaitCallback = true;
                 }
             }
             this.resolvedValue = encodeURIComponent(JSON.stringify(dic));
         }
     };
     resolve() {
-        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/0/" + this.valueType + "/" + this.resolvedValue;
+        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/" + (this.isSync ? 0 : 1) + "/" + this.valueType + "/" + this.resolvedValue;
     };
 };
 (function(){
@@ -110,40 +109,73 @@ class ExtMessage {
         invoke : function(target, action, params) {
             if (!this._validate(target) || !this._validate(action)) {
                 console.error("Invalid target or action");
-                return;
+                return false;
             }
             if (params instanceof ExtSubscribe) {
                 params.target = target;
                 params.action = action;
-                this._subscriberMap.set(this._generate(target, action, ""), params);
+                let key = this._generate(target, action, "");
+                var ret = false;
                 if (this._isIOS) {
-                    window.webkit.messageHandlers.ext.postMessage(params.resolve());
+                    var ret = window.prompt("ext",params.resolve());
+                    let resolvedMsg = this._parseSyncString(ret);
+                    if (resolvedMsg.value == 1) {
+                        this._subscriberMap.set(key, params);
+                        ret = true;
+                    } else {
+                        console.log("Client can not handle this subscriber");
+                    }
                 } else if(this._isAndroid) {
-                    window.ext.postMessage(params.resolve());
+                    var ret = window.ext.postMessage(params.resolve());
+                    let resolvedMsg = this._parseSyncString(ret);
+                    if (resolvedMsg.value == 1) {
+                        this._subscriberMap.set(key, params);
+                        ret = true;
+                    } else {
+                        console.log("Client can not handle this subscriber");
+                    }
                 }
+                return ret;
             } else if (params instanceof ExtUnsubscribe) {
                 params.target = target;
                 params.action = action;
-                var obj = this._subscriberMap.get[this._generate(target, action, "")];
+                let key = this._generate(target, action, "");
+                var obj = this._subscriberMap.get(key);
                 if (obj) {
-                    this._subscriberMap.delete(this._generate(target, action, ""));
-                    if (this._isIOS) {
-                        window.webkit.messageHandlers.ext.postMessage(params.resolve());
-                    } else if(this._isAndroid) {
-                        window.ext.postMessage(params.resolve());
-                    }
+                    this._subscriberMap.delete(key);
                 }
+                return true;
             } else {
                 let message = new ExtMessage(target, action, params);
-                if (message.needWaitCallback) {
-                    this._messageMap.set(this._generate(target, action, message.messageId), message);
-                }
                 if (this._isIOS) {
-                    window.webkit.messageHandlers.ext.postMessage(message.resolve());
+                    if (!message.isSync) {
+                        this._messageMap.set(this._generate(target, action, message.messageId), message);
+                        window.webkit.messageHandlers.ext.postMessage(message.resolve());
+                        return null;
+                    } else {
+                        let ret = window.prompt("ext", message.resolve());
+                        let resolvedMsg = this._parseSyncString(ret);
+                        if (resolvedMsg == null || resolvedMsg == undefined) {
+                            return null;
+                        }
+                        return resolvedMsg["value"];
+                    }
                 } else if(this._isAndroid) {
-                    window.ext.postMessage(message.resolve());
+                    if (!message.isSync) {
+                        this._messageMap.set(this._generate(target, action, message.messageId), message);
+                        window.ext.postMessage(message.resolve());
+                        return null;
+                    } else {
+                        let ret =window.ext.postMessage(message.resolve());
+                        let resolvedMsg = this._parseSyncString(ret);
+                        if (resolvedMsg == null || resolvedMsg == undefined) {
+                            return null;
+                        }
+                        return resolvedMsg["value"];
+                    }
                 }
             }
+            return null;
         },
          isAndroid : function () {
             var u = navigator.userAgent, app = navigator.appVersion;
@@ -153,7 +185,44 @@ class ExtMessage {
             var u = navigator.userAgent, app = navigator.appVersion;
             return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
          },
-        _parse : function (string) {
+         _parseSubscribeString : function (string) {
+            var resolvedMsg = {};
+            let array = string.split("/");
+            if (array.length > 0) {
+                let value = this._convert("A", array[0]);
+                if (value instanceof Array) {
+                    resolvedMsg["targets"] = value;
+                }
+            }
+            if (array.length > 1) {
+                resolvedMsg["action"] = array[1];
+            }
+            if (array.length > 2) {
+                resolvedMsg["valueType"] = array[2];
+            }
+            if (array.length > 3) {
+                let value = this._convert(array[2], array[3]);
+                if (value != null && value != undefined) {
+                    resolvedMsg["value"] = value;
+                }
+            }
+            return resolvedMsg;
+         } ,
+         _parseSyncString : function (string) {
+            var resolvedMsg = {};
+            let array = string.split("/");
+            if (array.length > 0) {
+                resolvedMsg["valueType"] = array[0];
+            }
+            if (array.length > 1) {
+                let value = this._convert(array[0], array[1]);
+                if (value != null && value != undefined) {
+                    resolvedMsg["value"] = value;
+                }
+            }
+            return resolvedMsg;
+         },
+        _parseAsyncString : function (string) {
             var resolvedMsg = {};
             let array = string.split("/");
             if (array.length > 0) {
@@ -201,7 +270,7 @@ class ExtMessage {
             } else if (valueType == "A") {
                 let object = JSON.parse(decodeString);
                 if (!(object instanceof Array)) {
-                    return nil;
+                    return null;
                 }
                 return object;
             } else if (valueType == 'O') {
@@ -221,15 +290,14 @@ class ExtMessage {
             }
             return false;
         },
-        //message invalid/dealloc
+        //client uncallback
         _d: function (m) {
-            let resolvedMsg = this._parse(m);
+            let resolvedMsg = this._parseAsyncString(m);
             if (resolvedMsg == null || resolvedMsg == undefined) {
                 return;
             }
             let target = resolvedMsg["target"];
             let action = resolvedMsg["action"];
-            let value = resolvedMsg["value"];
             let kind = resolvedMsg["kind"];
             let messageId = resolvedMsg["messageId"];
             if (kind == "0") {
@@ -247,21 +315,13 @@ class ExtMessage {
                     message.params["onComplete"](err);
                 }
                 this._messageMap.delete(key);
-            } else if (kind == "1") {
-                let key = this._generate(target, action, "");
-                let subscriber = this._subscriberMap.get(key);
-                if (subscriber == undefined || subscriber == null) {
-                    return;
-                }
-                if (subscriber.messageId != messageId) {
-                    return;
-                }
-                this._subscriberMap.delete(key);
             }
         },
         //message success
         _s : function (m) {
-            let resolvedMsg = this._parse(m);
+            console.log(111112 + m);
+            let resolvedMsg = this._parseAsyncString(m);
+            console.log(resolvedMsg);
             if (resolvedMsg == null || resolvedMsg == undefined) {
                 return new Error();
             }
@@ -270,10 +330,13 @@ class ExtMessage {
             let value = resolvedMsg["value"];
             let messageId = resolvedMsg["messageId"];
             let key = this._generate(target, action, messageId);
+ console.log(111112 + "key" + key);
             let message = this._messageMap.get(key);
+ console.log(111112 + "message" + message);
             if (message == undefined || message == null) {
                 return new Error();
             }
+  console.log(111112 + "message" + "ssss");
             if (typeof message.params["onSuccess"] == "function") {
                 message.params["onSuccess"](value);
             }
@@ -285,7 +348,7 @@ class ExtMessage {
         },
         //fail
         _f : function (m)  {
-            let resolvedMsg = this._parse(m);
+            let resolvedMsg = this._parseAsyncString(m);
             if (resolvedMsg == null || resolvedMsg == undefined) {
                 return  new Error();
             }
@@ -309,20 +372,20 @@ class ExtMessage {
         },
         //observe
         _o: function(m) {
-            let resolvedMsg = this._parse(m);
+            let resolvedMsg = this._parseSubscribeString(m);
             if (resolvedMsg == null || resolvedMsg == undefined) {
                 return new Error();
             }
-            let target = resolvedMsg["target"];
+            let targets = resolvedMsg["targets"];
             let action = resolvedMsg["action"];
             let value = resolvedMsg["value"];
-            let messageId = resolvedMsg["messageId"];
-            let subscriber = this._subscriberMap.get(this._generate(target, action, ""));
-            if (subscriber == undefined || subscriber == null) {
-                return new Error();
-            }
-            if (typeof subscriber.handler == "function") {
-                subscriber.handler(value);
+            for (var i = 0; i < targets.length; i++) {
+                let target = targets[i];
+                let key = this._generate(target, action, "");
+                let subscriber = this._subscriberMap.get(key);
+                if (subscriber != null && subscriber != undefined && typeof subscriber.handler == "function") {
+                    subscriber.handler(value);
+                }
             }
             return true;
         }
@@ -342,7 +405,7 @@ class ExtMessage {
         window.ext.invoke = extBridge.invoke;
         window.ext.isIOS = extBridge.isIOS;
         window.ext.isAndroid = extBridge.isAndroid;
-        window.ext._parse = extBridge._parse;
+        window.ext._parseAsyncString = extBridge._parseAsyncString;
         window.ext._convert = extBridge._convert;
         window.ext._generate = extBridge._generate;
         window.ext._validate = extBridge._validate;

@@ -15,10 +15,10 @@
 		B710ADF424E5288600AFE4BE /* TradeExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B710ADF324E5288600AFE4BE /* TradeExecutor.m */; };
 		B710ADF624E5363F00AFE4BE /* ext-bridge-runtime.js in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF524E5363F00AFE4BE /* ext-bridge-runtime.js */; };
 		B710ADF824E5365500AFE4BE /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF724E5365500AFE4BE /* index.html */; };
+		B736C10A24EE57EC00527B7A /* JSCoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B736C10924EE57EC00527B7A /* JSCoreViewController.m */; };
+		B736C12124EF8FA100527B7A /* AlertExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B736C12024EF8FA100527B7A /* AlertExecutor.m */; };
 		B76A77C624EAB3A300D03909 /* NotifyExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77C524EAB3A300D03909 /* NotifyExecutor.m */; };
-		B76A77CC24EB766600D03909 /* AlertTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77CB24EB766600D03909 /* AlertTest.m */; };
 		B76A77CF24EBB8AC00D03909 /* BaseTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77CE24EBB8AC00D03909 /* BaseTrade.m */; };
-		B76A77D224EBBAA800D03909 /* GeneralBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77D124EBBAA800D03909 /* GeneralBuilder.m */; };
 		B76A77DB24EBBB2700D03909 /* GeneralSecurity.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77DA24EBBB2700D03909 /* GeneralSecurity.m */; };
 		B780B93F24E3FB0B003E37A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B780B93E24E3FB0B003E37A4 /* AppDelegate.m */; };
 		B780B94224E3FB0B003E37A4 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B780B94124E3FB0B003E37A4 /* SceneDelegate.m */; };
@@ -63,14 +63,14 @@
 		B710ADF324E5288600AFE4BE /* TradeExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TradeExecutor.m; sourceTree = "<group>"; };
 		B710ADF524E5363F00AFE4BE /* ext-bridge-runtime.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "ext-bridge-runtime.js"; sourceTree = "<group>"; };
 		B710ADF724E5365500AFE4BE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		B736C10824EE57EC00527B7A /* JSCoreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSCoreViewController.h; sourceTree = "<group>"; };
+		B736C10924EE57EC00527B7A /* JSCoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSCoreViewController.m; sourceTree = "<group>"; };
+		B736C11F24EF8FA100527B7A /* AlertExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertExecutor.h; sourceTree = "<group>"; };
+		B736C12024EF8FA100527B7A /* AlertExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlertExecutor.m; sourceTree = "<group>"; };
 		B76A77C424EAB3A300D03909 /* NotifyExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotifyExecutor.h; sourceTree = "<group>"; };
 		B76A77C524EAB3A300D03909 /* NotifyExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotifyExecutor.m; sourceTree = "<group>"; };
-		B76A77CA24EB766600D03909 /* AlertTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertTest.h; sourceTree = "<group>"; };
-		B76A77CB24EB766600D03909 /* AlertTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlertTest.m; sourceTree = "<group>"; };
 		B76A77CD24EBB8AC00D03909 /* BaseTrade.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTrade.h; sourceTree = "<group>"; };
 		B76A77CE24EBB8AC00D03909 /* BaseTrade.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseTrade.m; sourceTree = "<group>"; };
-		B76A77D024EBBAA800D03909 /* GeneralBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneralBuilder.h; sourceTree = "<group>"; };
-		B76A77D124EBBAA800D03909 /* GeneralBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneralBuilder.m; sourceTree = "<group>"; };
 		B76A77D924EBBB2700D03909 /* GeneralSecurity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneralSecurity.h; sourceTree = "<group>"; };
 		B76A77DA24EBBB2700D03909 /* GeneralSecurity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneralSecurity.m; sourceTree = "<group>"; };
 		B780B93A24E3FB0B003E37A4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,15 +147,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B710ADF024E5284B00AFE4BE /* RepoNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				B710ADE624E51BF800AFE4BE /* Networking.h */,
-				B710ADE724E51BF800AFE4BE /* Networking.m */,
-			);
-			path = RepoNetworking;
-			sourceTree = "<group>";
-		};
 		B710ADF124E5285A00AFE4BE /* RepoTrade */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,23 +159,16 @@
 		B76A77D324EBBACA00D03909 /* Executor */ = {
 			isa = PBXGroup;
 			children = (
+				B710ADE624E51BF800AFE4BE /* Networking.h */,
+				B710ADE724E51BF800AFE4BE /* Networking.m */,
 				B710ADF224E5288600AFE4BE /* TradeExecutor.h */,
 				B710ADF324E5288600AFE4BE /* TradeExecutor.m */,
-				B76A77CA24EB766600D03909 /* AlertTest.h */,
-				B76A77CB24EB766600D03909 /* AlertTest.m */,
+				B736C11F24EF8FA100527B7A /* AlertExecutor.h */,
+				B736C12024EF8FA100527B7A /* AlertExecutor.m */,
 				B76A77C424EAB3A300D03909 /* NotifyExecutor.h */,
 				B76A77C524EAB3A300D03909 /* NotifyExecutor.m */,
 			);
 			path = Executor;
-			sourceTree = "<group>";
-		};
-		B76A77D424EBBAD200D03909 /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-				B76A77D024EBBAA800D03909 /* GeneralBuilder.h */,
-				B76A77D124EBBAA800D03909 /* GeneralBuilder.m */,
-			);
-			path = Builder;
 			sourceTree = "<group>";
 		};
 		B76A77D524EBBAD900D03909 /* Security */ = {
@@ -236,14 +220,14 @@
 				B780B94124E3FB0B003E37A4 /* SceneDelegate.m */,
 				B780B94324E3FB0B003E37A4 /* ViewController.h */,
 				B780B94424E3FB0B003E37A4 /* ViewController.m */,
+				B736C10824EE57EC00527B7A /* JSCoreViewController.h */,
+				B736C10924EE57EC00527B7A /* JSCoreViewController.m */,
 				B710ADE924E5254500AFE4BE /* WebViewController.h */,
 				B710ADEA24E5254500AFE4BE /* WebViewController.m */,
 				B76A77DC24EBBCD800D03909 /* Server */,
 				B76A77D524EBBAD900D03909 /* Security */,
-				B76A77D424EBBAD200D03909 /* Builder */,
 				B76A77D324EBBACA00D03909 /* Executor */,
 				B710ADF124E5285A00AFE4BE /* RepoTrade */,
-				B710ADF024E5284B00AFE4BE /* RepoNetworking */,
 				B780B94624E3FB0B003E37A4 /* Main.storyboard */,
 				B780B94924E3FB0E003E37A4 /* Assets.xcassets */,
 				B780B94B24E3FB0E003E37A4 /* LaunchScreen.storyboard */,
@@ -476,16 +460,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				B76A77DB24EBBB2700D03909 /* GeneralSecurity.m in Sources */,
-				B76A77D224EBBAA800D03909 /* GeneralBuilder.m in Sources */,
 				B780B94524E3FB0B003E37A4 /* ViewController.m in Sources */,
 				B710ADEB24E5254500AFE4BE /* WebViewController.m in Sources */,
 				B710ADF424E5288600AFE4BE /* TradeExecutor.m in Sources */,
+				B736C12124EF8FA100527B7A /* AlertExecutor.m in Sources */,
 				B780B93F24E3FB0B003E37A4 /* AppDelegate.m in Sources */,
+				B736C10A24EE57EC00527B7A /* JSCoreViewController.m in Sources */,
 				B780B95024E3FB0E003E37A4 /* main.m in Sources */,
 				B780B94224E3FB0B003E37A4 /* SceneDelegate.m in Sources */,
 				B710ADE824E51BF800AFE4BE /* Networking.m in Sources */,
 				B76A77CF24EBB8AC00D03909 /* BaseTrade.m in Sources */,
-				B76A77CC24EB766600D03909 /* AlertTest.m in Sources */,
 				B76A77C624EAB3A300D03909 /* NotifyExecutor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

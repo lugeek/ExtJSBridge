@@ -8,9 +8,8 @@
 
 #import "TradeExecutor.h"
 #import "BaseTrade.h"
-#import <ExtJSBridge/ExtJSBridgeHeader.h>
 
-@interface TradeExecutor()<ExtJSExecutorProtocol>
+@interface TradeExecutor()
 
 @property (nonatomic, strong) BaseTrade *trade;
 
@@ -26,21 +25,16 @@
     return self;
 }
 
-- (void)ext_handleJSMessage:(ExtJSMessage *)message {
-    if (message.kind != ExtJSMessageKindNormal) {
-        return;
-    }
-    if ([message.action isEqualToString:@"createOrder"]) {
-        NSArray *array = message.value[@"list"];
-        NSString *orderId = [self.trade createOrderWithProductIds:array];
-        [message callbackWithParams:orderId complete:nil];
-        return;
-    }
-    if ([message.action isEqualToString:@"pay"]) {
-        [self.trade payForOrderId:message.value complete:^{
-            [message callbackWithParams:@(true) complete:nil];
-        }];
-    }
+- (BOOL)ext_canHandleJSMessage:(ExtJSMessage *)message {
+    return YES;
+}
+
+- (id)ext_handleJSSyncMessage:(ExtJSMessage *)message {
+    return @1;
+}
+
+- (void)ext_handleJSAsyncMessage:(ExtJSMessage *)message callback:(ExtJSCallbackStatus(^)(id result))callback {
+    callback(@NO);
 }
 
 @end

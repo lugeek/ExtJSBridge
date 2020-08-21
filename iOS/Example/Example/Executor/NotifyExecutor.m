@@ -11,22 +11,28 @@
 
 @implementation NotifyExecutor
 
-+ (instancetype)singleton {
-    static NotifyExecutor *obj = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        obj = [NotifyExecutor new];
-    });
-    return obj;
+//override by subclass
+- (BOOL)verifyMessage:(ExtJSMessage *)message {
+    return YES;
 }
 
-- (void)ext_handleJSMessage:(ExtJSMessage *)message {
-    if ([message.action isEqualToString:@"post"] && message.kind == ExtJSMessageKindNormal) {
+//override by subclass
+- (nullable id)handleSyncMessage:(ExtJSNormalMessage *)message {
+    if ([message.action isEqualToString:@"post"]) {
         NSString *name = message.value[@"name"];
-        NSNumber *value = message.value[@"value"];
-        if (name) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:name object:value];
-        }
+        id value = message.value[@"value"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:name object:value];
     }
+    return nil;
+}
+
+//override by subclass
+- (void)handleAsyncMessage:(ExtJSNormalMessage *)message callback:(ExtJSCallbackStatus(^)(__nullable id result))callback {
+    
+}
+
+//override by subclass
++ (NSArray <NSString *> *)executorNames {
+    return @[@"notify"];
 }
 @end

@@ -7,9 +7,6 @@
 //
 
 #import "Networking.h"
-#import <ExtJSBridge/ExtJSExecutorProtocol.h>
-#import <ExtJSBridge/NSObject+ExtJSBridge.h>
-
 @interface Networking()
 
 @property (nonatomic, strong) AFHTTPSessionManager *manager;
@@ -22,8 +19,8 @@
 
 @implementation Networking
 
-- (instancetype)init {
-    self = [super init];
+- (instancetype)initWithBridge:(ExtJSBridge *)bridge {
+    self = [super initWithBridge:bridge];
     if (self) {
         self.manager = [[AFHTTPSessionManager alloc] init];
         self.reachableManager = [AFNetworkReachabilityManager manager];
@@ -42,7 +39,7 @@
                 [listener didChangedNetworkingStatus:status];
             }
         }
-        [weakSelf ext_callBackToJSSubscriberWithAction:@"onStateChange" params:@(status)];
+        [weakSelf didChangeValue:@(status) withAction:@"onStateChange"];
     }];
     [self.reachableManager startMonitoring];
 }
@@ -51,20 +48,46 @@
     [self.listeners addObject:listener];
 }
 
-- (void)ext_handleJSMessage:(ExtJSMessage *)message {
-    if ([message.action isEqualToString:@"post"]) {
-        [self post:message.value successBlock:^(id  _Nonnull result) {
-            [message callbackWithParams:result complete:nil];
-        } errorBlock:^(NSError * _Nonnull error) {
-            [message callbackWithParams:error complete:nil];
+- (BOOL)verifyMessage:(ExtJSMessage *)message {
+    return YES;
+}
+
+- (nullable id)handleSyncMessage:(ExtJSNormalMessage *)message {
+    return nil;
+}
+
+- (void)handleAsyncMessage:(ExtJSNormalMessage *)message callback:(ExtJSCallbackStatus(^)(__nullable id result))callback {
+    if ([message.action isEqualToString:@"show"]) {
+        NSString *title = message.value[@"title"];
+        NSString *msg = message.value[@"message"];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
         }];
+        [alertController addAction:cancel];
+        UIResponder *responder = message.bridge.webView;
+        while (responder.nextResponder) {
+            responder = responder.nextResponder;
+            if ([responder isKindOfClass:[UIViewController class]]) {
+                break;
+            }
+        }
+        if (responder) {
+            [(UIViewController *)responder presentViewController:alertController animated:YES completion:nil];
+        } else {
+            callback(@YES);
+        }
         return;
     }
     if ([message.action isEqualToString:@"status"]) {
-        [message callbackWithParams:@(self.reachableManager.networkReachabilityStatus) complete:nil];
-        return;
+        callback(@(self.reachableManager.networkReachabilityStatus));
     }
 }
+
++ (NSArray <NSString *> *)executorNames {
+    return @[@"network"];
+}
+
 
 - (void)post:(NSDictionary *)params successBlock:(void(^)(id result))successBlock errorBlock:(void(^)(NSError *error))errorBlock {
     [self.manager POST:@"" parameters:@{} headers:@{} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

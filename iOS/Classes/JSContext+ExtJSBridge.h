@@ -1,18 +1,19 @@
 //
-//  WKWebView+ExtJSBridge.h
-//  ExtJSBridge
+//  JSContext+ExtJSBridge.h
+//  AFNetworking
 //
-//  Created by hang_pan on 2020/8/13.
+//  Created by hang_pan on 2020/8/20.
 //
 
-#import <WebKit/WebKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 #import "ExtJSBridge.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WKWebView (ExtJSBridge)
+@interface JSContext (ExtJSBridge)
 
 @property (nonatomic, strong, readonly) ExtJSBridge *ext_bridge;
+
 //default name ext
 - (void)ext_initializeBridge;
 

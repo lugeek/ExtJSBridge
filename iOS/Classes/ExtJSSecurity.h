@@ -12,8 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ExtJSSecurity : NSObject
 
-//override by subclass; method will be called on child thread
-- (void)verifyMessage:(ExtJSMessage *)message complete:(void(^)(BOOL passed))complete;
+//override by subclass; method may called on child thread
+//return NO to ignore this message
+- (BOOL)verifyMessage:(ExtJSMessage *)message;
 
 @end
 

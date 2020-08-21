@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ExtJSBridge/ExtJSBridgeHeader.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 //warpper BaseTrade to support ExtJSMessage
-@interface TradeExecutor : NSObject
+@interface TradeExecutor : ExtJSExecutor
 
 @end
 

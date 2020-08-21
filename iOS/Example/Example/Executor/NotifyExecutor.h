@@ -11,9 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //create notify executor
-@interface NotifyExecutor : NSObject<ExtJSExecutorProtocol>
-
-+ (instancetype)singleton;
+@interface NotifyExecutor : ExtJSExecutor
 
 @end
 
