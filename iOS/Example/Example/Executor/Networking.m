@@ -57,32 +57,9 @@
 }
 
 - (void)handleAsyncMessage:(ExtJSNormalMessage *)message callback:(ExtJSCallbackStatus(^)(__nullable id result))callback {
-    if ([message.action isEqualToString:@"show"]) {
-        NSString *title = message.value[@"title"];
-        NSString *msg = message.value[@"message"];
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-
-        }];
-        [alertController addAction:cancel];
-        UIResponder *responder = message.bridge.webView;
-        while (responder.nextResponder) {
-            responder = responder.nextResponder;
-            if ([responder isKindOfClass:[UIViewController class]]) {
-                break;
-            }
-        }
-        if (responder) {
-            [(UIViewController *)responder presentViewController:alertController animated:YES completion:nil];
-        } else {
-            callback(@YES);
-        }
-        return;
-    }
-    if ([message.action isEqualToString:@"status"]) {
-        callback(@(self.reachableManager.networkReachabilityStatus));
-    }
+    callback(nil);
 }
+
 
 + (NSArray <NSString *> *)executorNames {
     return @[@"network"];

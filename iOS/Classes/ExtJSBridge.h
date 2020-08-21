@@ -6,32 +6,30 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import "ExtJSSecurity.h"
+#import "ExtJSExecutor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ExtJSBridge : NSObject<WKScriptMessageHandler, JSExport> 
+@interface ExtJSBridge : NSObject 
 
 //default ext
 @property (nonatomic, strong, readonly) NSString *name;
 
-//the connected webview
-@property (nonatomic, weak, nullable, readonly) WKWebView *webView;
-
-//the connected context
-@property (nonatomic, weak, nullable, readonly) JSContext *context;
+@property (nonatomic, strong, readonly) dispatch_queue_t queue;
 
 //verify the message form webview to protect data
 @property (nonatomic, strong) ExtJSSecurity *security;
 
-- (instancetype)initWithName:(NSString *)name webView:(WKWebView *)webView;
-
-- (instancetype)initWithName:(NSString *)name context:(JSContext *)context;
-
 + (void)registExecutorClass:(Class)aClass;
 
+- (instancetype)initWithName:(NSString *)name;
+
 - (void)didChangeValue:(id)value withTargets:(NSArray <NSString *> *)targets action:(NSString *)action;
+
+- (nullable ExtJSExecutor *)buildExecutorWithMessage:(ExtJSMessage *)message;
+
+- (void)cleanUpExecutorCache;
 
 @end
 

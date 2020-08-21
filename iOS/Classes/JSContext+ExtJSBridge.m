@@ -10,11 +10,11 @@
 
 @implementation JSContext (ExtJSBridge)
 
-- (ExtJSBridge *)ext_bridge {
+- (ExtJSCoreBridge *)ext_bridge {
     return objc_getAssociatedObject(self, "ext_bridge");
 }
 
-- (void)ext_setBridge:(ExtJSBridge *)bridge {
+- (void)ext_setBridge:(ExtJSCoreBridge *)bridge {
     objc_setAssociatedObject(self, "ext_bridge", bridge, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -23,7 +23,8 @@
 }
 
 - (void)ext_initializeBridgeWithName:(NSString *)name {
-    ExtJSBridge *bridge = [[ExtJSBridge alloc] initWithName:name context:self];
+    ExtJSCoreBridge *bridge = [[ExtJSCoreBridge alloc] initWithName:name context:self];
+    [self ext_setBridge:bridge];
     self[bridge.name] = bridge;
 }
 

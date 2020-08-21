@@ -6,13 +6,13 @@
 //
 
 #import <WebKit/WebKit.h>
-#import "ExtJSBridge.h"
+#import "ExtJSBridgeHeader.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WKWebView (ExtJSBridge)
 
-@property (nonatomic, strong, readonly) ExtJSBridge *ext_bridge;
+@property (nonatomic, strong, readonly) ExtJSWebBridge *ext_bridge;
 //default name ext
 - (void)ext_initializeBridge;
 

@@ -65,7 +65,7 @@
     if (self.ext_bridge) {
         return;
     }
-    ExtJSBridge *bridge = [[ExtJSBridge alloc] initWithName:name webView:self];
+    ExtJSWebBridge *bridge = [[ExtJSWebBridge alloc] initWithName:name webView:self];
     id delegate = self.UIDelegate;
     [self hookedSetUIDelegate:(id<WKUIDelegate>)bridge];
     [self ext_setBridge:bridge];

@@ -32,7 +32,7 @@ class ExtUnsubscribe {
         this.action = null;
     };
     resolve() {
-        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/2";
+        return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/3";
     };
 };
 //do not use
@@ -70,7 +70,7 @@ class ExtMessage {
         } else {
             this.valueType = "O";
             let dic = {};
-            for(let key in this.params) {
+            for (let key in this.params) {
                 let item = this.params[key];
                 if ((key == 'onSuccess' || key == 'onFail' || key == 'onComplete') && typeof item == 'function') {
                     this.isSync = false;
@@ -87,26 +87,26 @@ class ExtMessage {
         return this.target + "/" + this.action + "/" + this.messageId + "/" + this.timestamp + "/" + (this.isSync ? 0 : 1) + "/" + this.valueType + "/" + this.resolvedValue;
     };
 };
-(function(){
+(function () {
     let extBridge = {
         //never overwrite
         _messageId: -1,
         //normal message
-        _messageMap : new Map(),
+        _messageMap: new Map(),
         //subscribe message
-        _subscriberMap : new Map(),
-        _errorCodeMap:{
-            "0":"UnkownError",
-            "1":"ArgumentError",
-            "2":"AuthorityError",
-            "3":"UnrecognizedError",
-            "4":"Error"
+        _subscriberMap: new Map(),
+        _errorCodeMap: {
+            "0": "UnkownError",
+            "1": "ArgumentError",
+            "2": "AuthorityError",
+            "3": "UnrecognizedError",
+            "4": "Error"
         },
-        nextId : function() {
+        nextId: function () {
             return ++this._messageId;
         },
         // send message to native
-        invoke : function(target, action, params) {
+        invoke: function (target, action, params) {
             if (!this._validate(target) || !this._validate(action)) {
                 console.error("Invalid target or action");
                 return false;
@@ -117,7 +117,7 @@ class ExtMessage {
                 let key = this._generate(target, action, "");
                 var ret = false;
                 if (this._isIOS) {
-                    var ret = window.prompt("ext",params.resolve());
+                    var ret = window.prompt("ext", params.resolve());
                     let resolvedMsg = this._parseSyncString(ret);
                     if (resolvedMsg.value == 1) {
                         this._subscriberMap.set(key, params);
@@ -125,7 +125,7 @@ class ExtMessage {
                     } else {
                         console.log("Client can not handle this subscriber");
                     }
-                } else if(this._isAndroid) {
+                } else if (this._isAndroid) {
                     var ret = window.ext.postMessage(params.resolve());
                     let resolvedMsg = this._parseSyncString(ret);
                     if (resolvedMsg.value == 1) {
@@ -160,13 +160,13 @@ class ExtMessage {
                         }
                         return resolvedMsg["value"];
                     }
-                } else if(this._isAndroid) {
+                } else if (this._isAndroid) {
                     if (!message.isSync) {
                         this._messageMap.set(this._generate(target, action, message.messageId), message);
                         window.ext.postMessage(message.resolve());
                         return null;
                     } else {
-                        let ret =window.ext.postMessage(message.resolve());
+                        let ret = window.ext.postMessage(message.resolve());
                         let resolvedMsg = this._parseSyncString(ret);
                         if (resolvedMsg == null || resolvedMsg == undefined) {
                             return null;
@@ -177,15 +177,15 @@ class ExtMessage {
             }
             return null;
         },
-         isAndroid : function () {
+        isAndroid: function () {
             var u = navigator.userAgent, app = navigator.appVersion;
             return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
-         },
-         isIOS : function () {
+        },
+        isIOS: function () {
             var u = navigator.userAgent, app = navigator.appVersion;
             return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-         },
-         _parseSubscribeString : function (string) {
+        },
+        _parseSubscribeString: function (string) {
             var resolvedMsg = {};
             let array = string.split("/");
             if (array.length > 0) {
@@ -207,8 +207,8 @@ class ExtMessage {
                 }
             }
             return resolvedMsg;
-         } ,
-         _parseSyncString : function (string) {
+        },
+        _parseSyncString: function (string) {
             var resolvedMsg = {};
             let array = string.split("/");
             if (array.length > 0) {
@@ -221,8 +221,8 @@ class ExtMessage {
                 }
             }
             return resolvedMsg;
-         },
-        _parseAsyncString : function (string) {
+        },
+        _parseAsyncString: function (string) {
             var resolvedMsg = {};
             let array = string.split("/");
             if (array.length > 0) {
@@ -252,7 +252,7 @@ class ExtMessage {
             return resolvedMsg;
         },
         //conver string to value
-        _convert : function (valueType, string) {
+        _convert: function (valueType, string) {
             let decodeString = decodeURI(string);
             if (valueType == "S") {
                 return decodeString;
@@ -280,11 +280,11 @@ class ExtMessage {
             return string;
         },
         //generate subscriber key
-        _generate : function (target, action, id) {
+        _generate: function (target, action, id) {
             return target + "/" + action + "/" + id;
         },
         // validate target / action
-        _validate : function (params) {
+        _validate: function (params) {
             if (typeof params == 'string' && params.length > 0) {
                 return true;
             }
@@ -318,7 +318,7 @@ class ExtMessage {
             }
         },
         //message success
-        _s : function (m) {
+        _s: function (m) {
             console.log(111112 + m);
             let resolvedMsg = this._parseAsyncString(m);
             console.log(resolvedMsg);
@@ -330,13 +330,13 @@ class ExtMessage {
             let value = resolvedMsg["value"];
             let messageId = resolvedMsg["messageId"];
             let key = this._generate(target, action, messageId);
- console.log(111112 + "key" + key);
+            console.log(111112 + "key" + key);
             let message = this._messageMap.get(key);
- console.log(111112 + "message" + message);
+            console.log(111112 + "message" + message);
             if (message == undefined || message == null) {
                 return new Error();
             }
-  console.log(111112 + "message" + "ssss");
+            console.log(111112 + "message" + "ssss");
             if (typeof message.params["onSuccess"] == "function") {
                 message.params["onSuccess"](value);
             }
@@ -347,10 +347,10 @@ class ExtMessage {
             return true;
         },
         //fail
-        _f : function (m)  {
+        _f: function (m) {
             let resolvedMsg = this._parseAsyncString(m);
             if (resolvedMsg == null || resolvedMsg == undefined) {
-                return  new Error();
+                return new Error();
             }
             let target = resolvedMsg["target"];
             let action = resolvedMsg["action"];
@@ -359,7 +359,7 @@ class ExtMessage {
             let key = this._generate(target, action, messageId);
             let message = this._messageMap.get(key);
             if (message == undefined || message == null) {
-                return  new Error();
+                return new Error();
             }
             if (typeof message.params["onFail"] == "function") {
                 message.params["onFail"](value);
@@ -371,7 +371,7 @@ class ExtMessage {
             return true;
         },
         //observe
-        _o: function(m) {
+        _o: function (m) {
             let resolvedMsg = this._parseSubscribeString(m);
             if (resolvedMsg == null || resolvedMsg == undefined) {
                 return new Error();

@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "ExtJSMessage.h"
-#import "ExtJSBridge.h"
-
 typedef NS_ENUM(NSInteger, ExtJSCallbackStatus) {
     ExtJSCallbackStatusSucceed = 0,
     ExtJSCallbackStatusURLChanged,
@@ -16,6 +14,7 @@ typedef NS_ENUM(NSInteger, ExtJSCallbackStatus) {
 };
 
 NS_ASSUME_NONNULL_BEGIN
+@class ExtJSBridge;
 
 @interface ExtJSExecutor : NSObject
 

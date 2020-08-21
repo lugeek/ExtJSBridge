@@ -30,12 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *compactURLString; //without query and fragment
 
 - (instancetype)initWithTarget:(NSString *)target
-                      action:(NSString *)action
-                         mID:(NSString *)mID
-                   timestamp:(NSString *)timestamp
-                   frameInfo:(WKFrameInfo *)frameInfo
-            compactURLString:(NSString *)compactURLString
-                      bridge:(ExtJSBridge *)bridge;
+                        action:(NSString *)action
+                           mID:(NSString *)mID
+                     timestamp:(NSString *)timestamp
+                     frameInfo:(WKFrameInfo *)frameInfo
+              compactURLString:(NSString *)compactURLString
+                        bridge:(ExtJSBridge *)bridge;
 
 @end
 

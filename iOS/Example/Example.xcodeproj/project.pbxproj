@@ -17,6 +17,7 @@
 		B710ADF824E5365500AFE4BE /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B710ADF724E5365500AFE4BE /* index.html */; };
 		B736C10A24EE57EC00527B7A /* JSCoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B736C10924EE57EC00527B7A /* JSCoreViewController.m */; };
 		B736C12124EF8FA100527B7A /* AlertExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B736C12024EF8FA100527B7A /* AlertExecutor.m */; };
+		B736C12424EFC48100527B7A /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = B736C12324EFC48100527B7A /* index.js */; };
 		B76A77C624EAB3A300D03909 /* NotifyExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77C524EAB3A300D03909 /* NotifyExecutor.m */; };
 		B76A77CF24EBB8AC00D03909 /* BaseTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77CE24EBB8AC00D03909 /* BaseTrade.m */; };
 		B76A77DB24EBBB2700D03909 /* GeneralSecurity.m in Sources */ = {isa = PBXBuildFile; fileRef = B76A77DA24EBBB2700D03909 /* GeneralSecurity.m */; };
@@ -67,6 +68,7 @@
 		B736C10924EE57EC00527B7A /* JSCoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSCoreViewController.m; sourceTree = "<group>"; };
 		B736C11F24EF8FA100527B7A /* AlertExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertExecutor.h; sourceTree = "<group>"; };
 		B736C12024EF8FA100527B7A /* AlertExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlertExecutor.m; sourceTree = "<group>"; };
+		B736C12324EFC48100527B7A /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
 		B76A77C424EAB3A300D03909 /* NotifyExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotifyExecutor.h; sourceTree = "<group>"; };
 		B76A77C524EAB3A300D03909 /* NotifyExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotifyExecutor.m; sourceTree = "<group>"; };
 		B76A77CD24EBB8AC00D03909 /* BaseTrade.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTrade.h; sourceTree = "<group>"; };
@@ -156,6 +158,14 @@
 			path = RepoTrade;
 			sourceTree = "<group>";
 		};
+		B736C12224EFC45100527B7A /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				B736C12324EFC48100527B7A /* index.js */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
 		B76A77D324EBBACA00D03909 /* Executor */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +234,7 @@
 				B736C10924EE57EC00527B7A /* JSCoreViewController.m */,
 				B710ADE924E5254500AFE4BE /* WebViewController.h */,
 				B710ADEA24E5254500AFE4BE /* WebViewController.m */,
+				B736C12224EFC45100527B7A /* Local */,
 				B76A77DC24EBBCD800D03909 /* Server */,
 				B76A77D524EBBAD900D03909 /* Security */,
 				B76A77D324EBBACA00D03909 /* Executor */,
@@ -364,6 +375,7 @@
 				B710ADF824E5365500AFE4BE /* index.html in Resources */,
 				B780B94D24E3FB0E003E37A4 /* LaunchScreen.storyboard in Resources */,
 				B780B94A24E3FB0E003E37A4 /* Assets.xcassets in Resources */,
+				B736C12424EFC48100527B7A /* index.js in Resources */,
 				B780B94824E3FB0B003E37A4 /* Main.storyboard in Resources */,
 				B710ADF624E5363F00AFE4BE /* ext-bridge-runtime.js in Resources */,
 			);

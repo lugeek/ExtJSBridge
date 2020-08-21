@@ -11,14 +11,6 @@
 @implementation AlertExecutor
 
 //override by subclass
-- (BOOL)verifyMessage:(ExtJSMessage *)message {
-    if ([message.action hasPrefix:@"sync"]) {
-        return NO;
-    }
-    return YES;
-}
-
-//override by subclass
 - (nullable id)handleSyncMessage:(ExtJSNormalMessage *)message {
     return nil;
 }
@@ -34,20 +26,25 @@
                 callback(@YES);
             }];
             [alertController addAction:okAction];
-            UIResponder *responder = self.bridge.webView;
-            while (responder.nextResponder) {
-               responder = responder.nextResponder;
-               if ([responder isKindOfClass:[UIViewController class]]) {
-                   break;
-               }
-            }
-            if (responder) {
-               [(UIViewController *)responder presentViewController:alertController animated:YES completion:nil];
-            } else {
-               callback(@NO);
-            }
+            UIViewController *vc = [self currentController];
+            [vc presentViewController:alertController animated:YES completion:nil];
         });
     }
+}
+
+- (UIViewController *)currentController {
+    UIViewController *vc = nil;
+    if (@available(iOS 13.0, *)) {
+        for (UIWindowScene* windowScene in [UIApplication sharedApplication].connectedScenes) {
+            if (windowScene.activationState == UISceneActivationStateForegroundActive) {
+                vc = windowScene.windows.firstObject.rootViewController;
+                break;
+            }
+        }
+    } else {
+        vc = [UIApplication sharedApplication].delegate.window.rootViewController;
+    }
+    return vc;
 }
 
 //override by subclass

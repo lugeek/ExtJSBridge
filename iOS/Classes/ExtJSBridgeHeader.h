@@ -9,7 +9,10 @@
 #define ExtJSBridgeHeader_h
 
 #import "ExtJSBridge.h"
+#import "ExtJSWebBridge.h"
+#import "ExtJSCoreBridge.h"
 #import "ExtJSExecutor.h"
+#import "ExtJSMessage.h"
 #import "WKWebView+ExtJSBridge.h"
 #import "JSContext+ExtJSBridge.h"
 

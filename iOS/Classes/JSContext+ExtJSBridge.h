@@ -6,13 +6,13 @@
 //
 
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "ExtJSBridge.h"
+#import "ExtJSCoreBridge.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface JSContext (ExtJSBridge)
 
-@property (nonatomic, strong, readonly) ExtJSBridge *ext_bridge;
+@property (nonatomic, strong, readonly) ExtJSCoreBridge *ext_bridge;
 
 //default name ext
 - (void)ext_initializeBridge;
