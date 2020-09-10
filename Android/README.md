@@ -1,10 +1,14 @@
+# ExtJSBridge - Android
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.pn-x/extjsbridge.svg)](https://mvnrepository.com/artifact/com.github.pn-x/extjsbridge)
+
 Configuration
 --------
 1. dependencies 
 ```groovy
 dependencies {
-  implementation 'com.github.pn-x:extjsbridge:0.0.3'
-  annotationProcessor 'com.github.pn-x:extjsbridge-compiler:0.0.3'
+implementation 'com.github.pn-x:extjsbridge:{latest-version}'
+  annotationProcessor 'com.github.pn-x:extjsbridge-compiler:{latest-version}'
 }
 ```
 
