@@ -1,0 +1,5 @@
+include ':extjsbridge-annotations'
+include ':extjsbridge-compiler'
+include ':extjsbridge'
+include ':app'
+rootProject.name = "ExtJSBridge"

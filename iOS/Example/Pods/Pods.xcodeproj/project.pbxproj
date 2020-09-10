@@ -1,0 +1,843 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		058AA1A0B5002785A7547B57D10C4E34 /* ExtJSToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E27C1CBA27E1A50560FC19CB851B3BF /* ExtJSToolBox.m */; };
+		2E1319A9D7542F563CFCCCA0E4BDFBB6 /* ExtJSModule.m in Sources */ = {isa = PBXBuildFile; fileRef = AF56FD931FE94BADC9B6498BC7F68DB1 /* ExtJSModule.m */; };
+		308C244989099E0D1E6D04D9ADD5026A /* JSContext+ExtJSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 2464994502ED7909CC86169C62A5051D /* JSContext+ExtJSBridge.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		585D3CFEA714BA2009CF50FECAB2FAB5 /* ExtJSSession.h in Headers */ = {isa = PBXBuildFile; fileRef = C0CE7F52A9BCBB6FAB93B57E39CCB582 /* ExtJSSession.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5C2C6D2EA80B927E67C281E9FCD0BB15 /* ExtJSContextBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDD9B9DB5A109AC42E597094F38966A /* ExtJSContextBridge.m */; };
+		5DDDDB9FE37E4258E681EB3569F3FBF8 /* ExtJSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C4F4A1D983FCEDDF2F711B04A2F05F0 /* ExtJSBridge.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		615578EF6914D8C09B1B27D7995D6804 /* ExtJSToolBox.h in Headers */ = {isa = PBXBuildFile; fileRef = D160FAE9EB946B79A9B5CC8EDD80CE79 /* ExtJSToolBox.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		64EB24206D9E735950D625D3078CAB13 /* ExtJSModule.h in Headers */ = {isa = PBXBuildFile; fileRef = A605CFA851489F7B5FD065A81F55A585 /* ExtJSModule.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		689FBFDDE0248B786B15C1EB775CF8CF /* ExtJSWebViewBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 995EBE228CA5BAA6F5CC697AAB186BBD /* ExtJSWebViewBridge.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		69BE4045FF6862EB71B597E619E4052F /* WKWebView+ExtJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FF86C74900665F29D0276DD9D9DF7011 /* WKWebView+ExtJSBridge.m */; };
+		79107BAE03ACF7D422FB5727543C967F /* ExtJSWebViewBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D500B7F22C255C21E12188E26F613C2 /* ExtJSWebViewBridge.m */; };
+		7B334976EEA5A182DFFD8512692B4E36 /* ExtJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 65557794724A1567021EBF5131B53FD9 /* ExtJSBridge.m */; };
+		8A74237588F755AB8B7C4655A1FF2C1A /* JSContext+ExtJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B02573A9D6E15DA56F1AFE29BEB5DCA5 /* JSContext+ExtJSBridge.m */; };
+		8B3C905CF00B52D0332D4D49A3C4FFD7 /* ExtJSModuleFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1415B093EC513AF7710E3B854CFCB6 /* ExtJSModuleFactory.m */; };
+		9053869C5AE839D1FCFF4818ED115B69 /* ExtJSModuleFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D9460932A9958572934BF1296214E86 /* ExtJSModuleFactory.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B3F7E4301D48136411BBE9EEBFDE4FAF /* WKWebView+ExtJSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 04BD0702A67D6F50868600F5B60DF670 /* WKWebView+ExtJSBridge.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B7BB9268EEE7A8C6361BE9EA84EBD723 /* ExtJSCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CB009550ADB437A7419F5BD40839AE /* ExtJSCleaner.m */; };
+		B8E926274800CAAA8CF516B8F018BAD1 /* ExtJSCleaner.h in Headers */ = {isa = PBXBuildFile; fileRef = 4972720D056FB470FF3B48C8A7620BA1 /* ExtJSCleaner.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		BE0A68F56F593FC53C0BE2CDDFE0B45D /* Pods-ExampleUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9570E9D3BDB2C19DE2C13123030D53 /* Pods-ExampleUITests-dummy.m */; };
+		CA78727B1EF5C0A907D9315E6D4CA2BA /* Pods-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 67BAEA54E879D19134F7C5E5F6A70D14 /* Pods-Example-dummy.m */; };
+		CC3F5F9FDE572B0FE65FBAC26EE6882B /* Pods-ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D280BF746DD6E9F2A2124481DCC5C7 /* Pods-ExampleTests-dummy.m */; };
+		D2C9E5C708D0785A4E8CB42E4F01E96B /* ExtJSContextBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 9946CCC6ADAEC93DB2700B8FAE78D092 /* ExtJSContextBridge.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E97EA20623BB94216F459979223CB83C /* ExtJSBridge-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 971D9515C6AB8CB399A3448D804DDEBF /* ExtJSBridge-dummy.m */; };
+		F8A1550A777631897DD8E80D7EE9DFA0 /* ExtJSSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 3151B86CBD20EBD3EE7D5249135D0B85 /* ExtJSSession.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		06C7B8D3D6A03651C448A0D6BE80A412 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0AEE99A309977BD12A049FF48AF9BA4B;
+			remoteInfo = "Pods-Example";
+		};
+		1E0F89C7E16C52C2BF5A8233B07EC970 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54795BC170DC4C7A47F4C0FC191DE1D9;
+			remoteInfo = ExtJSBridge;
+		};
+		A9EC5B4032BF143FCA57BE4DADB9B09B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0AEE99A309977BD12A049FF48AF9BA4B;
+			remoteInfo = "Pods-Example";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		04BD0702A67D6F50868600F5B60DF670 /* WKWebView+ExtJSBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "WKWebView+ExtJSBridge.h"; path = "iOS/Classes/WKWebView+ExtJSBridge.h"; sourceTree = "<group>"; };
+		0A9C45F4FB74E12AE57C45BBC15DF395 /* Pods-Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		0B4AC3C6CB7F2B5A6B42EF36BAA1C949 /* ExtJSBridge.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = ExtJSBridge.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0FB47609807628C214EDE99ED0003BFA /* Pods-ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
+		1E27C1CBA27E1A50560FC19CB851B3BF /* ExtJSToolBox.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSToolBox.m; path = iOS/Classes/ExtJSToolBox.m; sourceTree = "<group>"; };
+		1F667CC0E19EAF34E5A4119E2121F585 /* libPods-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2464994502ED7909CC86169C62A5051D /* JSContext+ExtJSBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "JSContext+ExtJSBridge.h"; path = "iOS/Classes/JSContext+ExtJSBridge.h"; sourceTree = "<group>"; };
+		2C4F4A1D983FCEDDF2F711B04A2F05F0 /* ExtJSBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSBridge.h; path = iOS/Classes/ExtJSBridge.h; sourceTree = "<group>"; };
+		2D9460932A9958572934BF1296214E86 /* ExtJSModuleFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSModuleFactory.h; path = iOS/Classes/ExtJSModuleFactory.h; sourceTree = "<group>"; };
+		30DAB25B89E89444F16DC84AB4743AE9 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		3151B86CBD20EBD3EE7D5249135D0B85 /* ExtJSSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSSession.m; path = iOS/Classes/ExtJSSession.m; sourceTree = "<group>"; };
+		4972720D056FB470FF3B48C8A7620BA1 /* ExtJSCleaner.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSCleaner.h; path = iOS/Classes/ExtJSCleaner.h; sourceTree = "<group>"; };
+		4CED65E44B024AECD549FBF570B42C88 /* Pods-ExampleTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ExampleTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		57C2E0572F7465FC0594C76844085D21 /* ExtJSBridge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ExtJSBridge.release.xcconfig; sourceTree = "<group>"; };
+		5E1415B093EC513AF7710E3B854CFCB6 /* ExtJSModuleFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSModuleFactory.m; path = iOS/Classes/ExtJSModuleFactory.m; sourceTree = "<group>"; };
+		630CABE8F692FCDBFD1B122A2D0CE388 /* libPods-ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		65557794724A1567021EBF5131B53FD9 /* ExtJSBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSBridge.m; path = iOS/Classes/ExtJSBridge.m; sourceTree = "<group>"; };
+		67498497C3CE5572BF3218D86C05B27D /* libExtJSBridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libExtJSBridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		67BAEA54E879D19134F7C5E5F6A70D14 /* Pods-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Example-dummy.m"; sourceTree = "<group>"; };
+		728B19FBA0B601C642EACB059184FA4D /* Pods-ExampleTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ExampleTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		80CB009550ADB437A7419F5BD40839AE /* ExtJSCleaner.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSCleaner.m; path = iOS/Classes/ExtJSCleaner.m; sourceTree = "<group>"; };
+		8D500B7F22C255C21E12188E26F613C2 /* ExtJSWebViewBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSWebViewBridge.m; path = iOS/Classes/ExtJSWebViewBridge.m; sourceTree = "<group>"; };
+		971D9515C6AB8CB399A3448D804DDEBF /* ExtJSBridge-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ExtJSBridge-dummy.m"; sourceTree = "<group>"; };
+		9946CCC6ADAEC93DB2700B8FAE78D092 /* ExtJSContextBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSContextBridge.h; path = iOS/Classes/ExtJSContextBridge.h; sourceTree = "<group>"; };
+		995EBE228CA5BAA6F5CC697AAB186BBD /* ExtJSWebViewBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSWebViewBridge.h; path = iOS/Classes/ExtJSWebViewBridge.h; sourceTree = "<group>"; };
+		9A54F3AF99A2F809D4A48981C2D011BC /* Pods-ExampleUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ExampleUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		9B4B1D86914CDB133B1DC2373DF4F508 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A605CFA851489F7B5FD065A81F55A585 /* ExtJSModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSModule.h; path = iOS/Classes/ExtJSModule.h; sourceTree = "<group>"; };
+		AD9570E9D3BDB2C19DE2C13123030D53 /* Pods-ExampleUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ExampleUITests-dummy.m"; sourceTree = "<group>"; };
+		AF56FD931FE94BADC9B6498BC7F68DB1 /* ExtJSModule.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSModule.m; path = iOS/Classes/ExtJSModule.m; sourceTree = "<group>"; };
+		B02573A9D6E15DA56F1AFE29BEB5DCA5 /* JSContext+ExtJSBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "JSContext+ExtJSBridge.m"; path = "iOS/Classes/JSContext+ExtJSBridge.m"; sourceTree = "<group>"; };
+		B85994BBB2D0116207630C41C9978BD0 /* Pods-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B9862301EC4F3CEFE5925E1CFDC5C5CE /* Pods-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		BF4812F4061DC297B31F6A7002A04ADE /* Pods-ExampleUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ExampleUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		BFE2E2E4723C0322095E4749875FE1D9 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C0CE7F52A9BCBB6FAB93B57E39CCB582 /* ExtJSSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSSession.h; path = iOS/Classes/ExtJSSession.h; sourceTree = "<group>"; };
+		C232398D4E3A40F2337F8A40D7F8D751 /* libPods-ExampleUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExampleUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCDD9B9DB5A109AC42E597094F38966A /* ExtJSContextBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ExtJSContextBridge.m; path = iOS/Classes/ExtJSContextBridge.m; sourceTree = "<group>"; };
+		CD6077C4CA814255BA143200D95BE84B /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		D160FAE9EB946B79A9B5CC8EDD80CE79 /* ExtJSToolBox.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExtJSToolBox.h; path = iOS/Classes/ExtJSToolBox.h; sourceTree = "<group>"; };
+		D71123C4DEB6FE67CE2CACEB6BD39E29 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		DEE83F53E0A704AF3B3F71E715940E22 /* ExtJSBridge-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ExtJSBridge-prefix.pch"; sourceTree = "<group>"; };
+		E0D280BF746DD6E9F2A2124481DCC5C7 /* Pods-ExampleTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ExampleTests-dummy.m"; sourceTree = "<group>"; };
+		E35C4FEFACCBD6DE17C29690B7E951A5 /* Pods-ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		F4590747648C99E06FF49FDEA4811B6B /* ExtJSBridge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ExtJSBridge.debug.xcconfig; sourceTree = "<group>"; };
+		FF86C74900665F29D0276DD9D9DF7011 /* WKWebView+ExtJSBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "WKWebView+ExtJSBridge.m"; path = "iOS/Classes/WKWebView+ExtJSBridge.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		09D9E7A7A124B458E7EE83D1F055BADA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B81042D8276D41FAC5C5A990AF0F303 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AD3C5FDC3EE779094EC564C85EFFBB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F22D7CC1031CBDC4B80BBFEAEFB55786 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2278B55FA8A114E6BACB2F9A338FE872 /* Pods-ExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9A54F3AF99A2F809D4A48981C2D011BC /* Pods-ExampleUITests-acknowledgements.markdown */,
+				BF4812F4061DC297B31F6A7002A04ADE /* Pods-ExampleUITests-acknowledgements.plist */,
+				AD9570E9D3BDB2C19DE2C13123030D53 /* Pods-ExampleUITests-dummy.m */,
+				E35C4FEFACCBD6DE17C29690B7E951A5 /* Pods-ExampleUITests.debug.xcconfig */,
+				0FB47609807628C214EDE99ED0003BFA /* Pods-ExampleUITests.release.xcconfig */,
+			);
+			name = "Pods-ExampleUITests";
+			path = "Target Support Files/Pods-ExampleUITests";
+			sourceTree = "<group>";
+		};
+		285A9CDDA5EF1B045B52BB0FAF8121F2 /* Pods-Example */ = {
+			isa = PBXGroup;
+			children = (
+				B9862301EC4F3CEFE5925E1CFDC5C5CE /* Pods-Example-acknowledgements.markdown */,
+				0A9C45F4FB74E12AE57C45BBC15DF395 /* Pods-Example-acknowledgements.plist */,
+				67BAEA54E879D19134F7C5E5F6A70D14 /* Pods-Example-dummy.m */,
+				CD6077C4CA814255BA143200D95BE84B /* Pods-Example.debug.xcconfig */,
+				9B4B1D86914CDB133B1DC2373DF4F508 /* Pods-Example.release.xcconfig */,
+			);
+			name = "Pods-Example";
+			path = "Target Support Files/Pods-Example";
+			sourceTree = "<group>";
+		};
+		2C47C644CD5A804086E0451F3137D21A /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				0B4AC3C6CB7F2B5A6B42EF36BAA1C949 /* ExtJSBridge.podspec */,
+				D71123C4DEB6FE67CE2CACEB6BD39E29 /* LICENSE */,
+				BFE2E2E4723C0322095E4749875FE1D9 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		3D58F614626CCDF43E01276C9E7A099E /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FC667BC357FBE720760FB28AFE9DEEDD /* ExtJSBridge */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		49DD888646E8E4E106A518FE73BA9872 /* Pods-ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				728B19FBA0B601C642EACB059184FA4D /* Pods-ExampleTests-acknowledgements.markdown */,
+				4CED65E44B024AECD549FBF570B42C88 /* Pods-ExampleTests-acknowledgements.plist */,
+				E0D280BF746DD6E9F2A2124481DCC5C7 /* Pods-ExampleTests-dummy.m */,
+				B85994BBB2D0116207630C41C9978BD0 /* Pods-ExampleTests.debug.xcconfig */,
+				30DAB25B89E89444F16DC84AB4743AE9 /* Pods-ExampleTests.release.xcconfig */,
+			);
+			name = "Pods-ExampleTests";
+			path = "Target Support Files/Pods-ExampleTests";
+			sourceTree = "<group>";
+		};
+		65A0438C861FC63E770860FA423D15E0 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				285A9CDDA5EF1B045B52BB0FAF8121F2 /* Pods-Example */,
+				49DD888646E8E4E106A518FE73BA9872 /* Pods-ExampleTests */,
+				2278B55FA8A114E6BACB2F9A338FE872 /* Pods-ExampleUITests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		7C2DD8B28AE752C716A546AA32B47B36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				67498497C3CE5572BF3218D86C05B27D /* libExtJSBridge.a */,
+				1F667CC0E19EAF34E5A4119E2121F585 /* libPods-Example.a */,
+				630CABE8F692FCDBFD1B122A2D0CE388 /* libPods-ExampleTests.a */,
+				C232398D4E3A40F2337F8A40D7F8D751 /* libPods-ExampleUITests.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A16E4280922E6F94371303B2472B94E /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				971D9515C6AB8CB399A3448D804DDEBF /* ExtJSBridge-dummy.m */,
+				DEE83F53E0A704AF3B3F71E715940E22 /* ExtJSBridge-prefix.pch */,
+				F4590747648C99E06FF49FDEA4811B6B /* ExtJSBridge.debug.xcconfig */,
+				57C2E0572F7465FC0594C76844085D21 /* ExtJSBridge.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "iOS/Example/Pods/Target Support Files/ExtJSBridge";
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				3D58F614626CCDF43E01276C9E7A099E /* Development Pods */,
+				D89477F20FB1DE18A04690586D7808C4 /* Frameworks */,
+				7C2DD8B28AE752C716A546AA32B47B36 /* Products */,
+				65A0438C861FC63E770860FA423D15E0 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FC667BC357FBE720760FB28AFE9DEEDD /* ExtJSBridge */ = {
+			isa = PBXGroup;
+			children = (
+				2C4F4A1D983FCEDDF2F711B04A2F05F0 /* ExtJSBridge.h */,
+				65557794724A1567021EBF5131B53FD9 /* ExtJSBridge.m */,
+				4972720D056FB470FF3B48C8A7620BA1 /* ExtJSCleaner.h */,
+				80CB009550ADB437A7419F5BD40839AE /* ExtJSCleaner.m */,
+				9946CCC6ADAEC93DB2700B8FAE78D092 /* ExtJSContextBridge.h */,
+				CCDD9B9DB5A109AC42E597094F38966A /* ExtJSContextBridge.m */,
+				A605CFA851489F7B5FD065A81F55A585 /* ExtJSModule.h */,
+				AF56FD931FE94BADC9B6498BC7F68DB1 /* ExtJSModule.m */,
+				2D9460932A9958572934BF1296214E86 /* ExtJSModuleFactory.h */,
+				5E1415B093EC513AF7710E3B854CFCB6 /* ExtJSModuleFactory.m */,
+				C0CE7F52A9BCBB6FAB93B57E39CCB582 /* ExtJSSession.h */,
+				3151B86CBD20EBD3EE7D5249135D0B85 /* ExtJSSession.m */,
+				D160FAE9EB946B79A9B5CC8EDD80CE79 /* ExtJSToolBox.h */,
+				1E27C1CBA27E1A50560FC19CB851B3BF /* ExtJSToolBox.m */,
+				995EBE228CA5BAA6F5CC697AAB186BBD /* ExtJSWebViewBridge.h */,
+				8D500B7F22C255C21E12188E26F613C2 /* ExtJSWebViewBridge.m */,
+				2464994502ED7909CC86169C62A5051D /* JSContext+ExtJSBridge.h */,
+				B02573A9D6E15DA56F1AFE29BEB5DCA5 /* JSContext+ExtJSBridge.m */,
+				04BD0702A67D6F50868600F5B60DF670 /* WKWebView+ExtJSBridge.h */,
+				FF86C74900665F29D0276DD9D9DF7011 /* WKWebView+ExtJSBridge.m */,
+				2C47C644CD5A804086E0451F3137D21A /* Pod */,
+				9A16E4280922E6F94371303B2472B94E /* Support Files */,
+			);
+			name = ExtJSBridge;
+			path = ../../..;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6F0B7316094C35F4A859A000BC059566 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF71B1AE638405E224F6174A8FF461BF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B586C4E08974BE4C2D20E5D81EE254FA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5DDDDB9FE37E4258E681EB3569F3FBF8 /* ExtJSBridge.h in Headers */,
+				B8E926274800CAAA8CF516B8F018BAD1 /* ExtJSCleaner.h in Headers */,
+				D2C9E5C708D0785A4E8CB42E4F01E96B /* ExtJSContextBridge.h in Headers */,
+				64EB24206D9E735950D625D3078CAB13 /* ExtJSModule.h in Headers */,
+				9053869C5AE839D1FCFF4818ED115B69 /* ExtJSModuleFactory.h in Headers */,
+				585D3CFEA714BA2009CF50FECAB2FAB5 /* ExtJSSession.h in Headers */,
+				615578EF6914D8C09B1B27D7995D6804 /* ExtJSToolBox.h in Headers */,
+				689FBFDDE0248B786B15C1EB775CF8CF /* ExtJSWebViewBridge.h in Headers */,
+				308C244989099E0D1E6D04D9ADD5026A /* JSContext+ExtJSBridge.h in Headers */,
+				B3F7E4301D48136411BBE9EEBFDE4FAF /* WKWebView+ExtJSBridge.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFC6A9C647E00D469668649092BC4CE4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6E906B887F3B1DAB65E3FFE4C14FC50 /* Build configuration list for PBXNativeTarget "Pods-Example" */;
+			buildPhases = (
+				6F0B7316094C35F4A859A000BC059566 /* Headers */,
+				7C3DF1479C8C686DC93CCC8792970D41 /* Sources */,
+				09D9E7A7A124B458E7EE83D1F055BADA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				36BE11844BAC7E8A19D4829A39172F4C /* PBXTargetDependency */,
+			);
+			name = "Pods-Example";
+			productName = "Pods-Example";
+			productReference = 1F667CC0E19EAF34E5A4119E2121F585 /* libPods-Example.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4432A314DF5F14FFF8809E319054F4AF /* Pods-ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDE0A5BAECBFA85414B2624CFE6C13FB /* Build configuration list for PBXNativeTarget "Pods-ExampleTests" */;
+			buildPhases = (
+				AF71B1AE638405E224F6174A8FF461BF /* Headers */,
+				154E39C4C89927C9C1B21650E908D461 /* Sources */,
+				2B81042D8276D41FAC5C5A990AF0F303 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1345333FA46703B1BE62CEFF13353239 /* PBXTargetDependency */,
+			);
+			name = "Pods-ExampleTests";
+			productName = "Pods-ExampleTests";
+			productReference = 630CABE8F692FCDBFD1B122A2D0CE388 /* libPods-ExampleTests.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		54795BC170DC4C7A47F4C0FC191DE1D9 /* ExtJSBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF12C415E1D53AB860B5FDA941C3ADB /* Build configuration list for PBXNativeTarget "ExtJSBridge" */;
+			buildPhases = (
+				B586C4E08974BE4C2D20E5D81EE254FA /* Headers */,
+				4F13304BC79D5B4D41B98CB22F7D2308 /* Sources */,
+				F22D7CC1031CBDC4B80BBFEAEFB55786 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExtJSBridge;
+			productName = ExtJSBridge;
+			productReference = 67498497C3CE5572BF3218D86C05B27D /* libExtJSBridge.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		8844A49AE64365ECBB6F0B228922E3D4 /* Pods-ExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F48C390735EB9236ED7203AF1942BB02 /* Build configuration list for PBXNativeTarget "Pods-ExampleUITests" */;
+			buildPhases = (
+				EFC6A9C647E00D469668649092BC4CE4 /* Headers */,
+				347E20655C2066571A05A27D6A7DE626 /* Sources */,
+				5AD3C5FDC3EE779094EC564C85EFFBB5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B23CB00E8AF09D7841DCBD1AEEA39E8B /* PBXTargetDependency */,
+			);
+			name = "Pods-ExampleUITests";
+			productName = "Pods-ExampleUITests";
+			productReference = C232398D4E3A40F2337F8A40D7F8D751 /* libPods-ExampleUITests.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1110;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 7C2DD8B28AE752C716A546AA32B47B36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				54795BC170DC4C7A47F4C0FC191DE1D9 /* ExtJSBridge */,
+				0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */,
+				4432A314DF5F14FFF8809E319054F4AF /* Pods-ExampleTests */,
+				8844A49AE64365ECBB6F0B228922E3D4 /* Pods-ExampleUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		154E39C4C89927C9C1B21650E908D461 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC3F5F9FDE572B0FE65FBAC26EE6882B /* Pods-ExampleTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		347E20655C2066571A05A27D6A7DE626 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE0A68F56F593FC53C0BE2CDDFE0B45D /* Pods-ExampleUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F13304BC79D5B4D41B98CB22F7D2308 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E97EA20623BB94216F459979223CB83C /* ExtJSBridge-dummy.m in Sources */,
+				7B334976EEA5A182DFFD8512692B4E36 /* ExtJSBridge.m in Sources */,
+				B7BB9268EEE7A8C6361BE9EA84EBD723 /* ExtJSCleaner.m in Sources */,
+				5C2C6D2EA80B927E67C281E9FCD0BB15 /* ExtJSContextBridge.m in Sources */,
+				2E1319A9D7542F563CFCCCA0E4BDFBB6 /* ExtJSModule.m in Sources */,
+				8B3C905CF00B52D0332D4D49A3C4FFD7 /* ExtJSModuleFactory.m in Sources */,
+				F8A1550A777631897DD8E80D7EE9DFA0 /* ExtJSSession.m in Sources */,
+				058AA1A0B5002785A7547B57D10C4E34 /* ExtJSToolBox.m in Sources */,
+				79107BAE03ACF7D422FB5727543C967F /* ExtJSWebViewBridge.m in Sources */,
+				8A74237588F755AB8B7C4655A1FF2C1A /* JSContext+ExtJSBridge.m in Sources */,
+				69BE4045FF6862EB71B597E619E4052F /* WKWebView+ExtJSBridge.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C3DF1479C8C686DC93CCC8792970D41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA78727B1EF5C0A907D9315E6D4CA2BA /* Pods-Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1345333FA46703B1BE62CEFF13353239 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Example";
+			target = 0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */;
+			targetProxy = 06C7B8D3D6A03651C448A0D6BE80A412 /* PBXContainerItemProxy */;
+		};
+		36BE11844BAC7E8A19D4829A39172F4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ExtJSBridge;
+			target = 54795BC170DC4C7A47F4C0FC191DE1D9 /* ExtJSBridge */;
+			targetProxy = 1E0F89C7E16C52C2BF5A8233B07EC970 /* PBXContainerItemProxy */;
+		};
+		B23CB00E8AF09D7841DCBD1AEEA39E8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Example";
+			target = 0AEE99A309977BD12A049FF48AF9BA4B /* Pods-Example */;
+			targetProxy = A9EC5B4032BF143FCA57BE4DADB9B09B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		067B9F51EBEE8887A611ECB30BC7E6EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F4590747648C99E06FF49FDEA4811B6B /* ExtJSBridge.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/ExtJSBridge/ExtJSBridge-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = ExtJSBridge;
+				PRODUCT_NAME = ExtJSBridge;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		663409C39F6C7F7BD67E33E8535667CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0FB47609807628C214EDE99ED0003BFA /* Pods-ExampleUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7FEABCF6A2C61FBC1F51F513791460D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B4B1D86914CDB133B1DC2373DF4F508 /* Pods-Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		83351AD025D02CBAEB5767DB76AD69F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CD6077C4CA814255BA143200D95BE84B /* Pods-Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89451CA9341A1C2F5539029A4E60AF78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30DAB25B89E89444F16DC84AB4743AE9 /* Pods-ExampleTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8F17DC3A99F99FBAD606CE6963886315 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		916E0404255105F480DC4950B7625F7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		97CA7A894E7C3552358FADD21CA124DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57C2E0572F7465FC0594C76844085D21 /* ExtJSBridge.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/ExtJSBridge/ExtJSBridge-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = ExtJSBridge;
+				PRODUCT_NAME = ExtJSBridge;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C02D4005B684D7C3E691D7D44B1EB53D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B85994BBB2D0116207630C41C9978BD0 /* Pods-ExampleTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D49CDA3D2F689957288788D4DD0F7A5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E35C4FEFACCBD6DE17C29690B7E951A5 /* Pods-ExampleUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				916E0404255105F480DC4950B7625F7A /* Debug */,
+				8F17DC3A99F99FBAD606CE6963886315 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CF12C415E1D53AB860B5FDA941C3ADB /* Build configuration list for PBXNativeTarget "ExtJSBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				067B9F51EBEE8887A611ECB30BC7E6EB /* Debug */,
+				97CA7A894E7C3552358FADD21CA124DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDE0A5BAECBFA85414B2624CFE6C13FB /* Build configuration list for PBXNativeTarget "Pods-ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C02D4005B684D7C3E691D7D44B1EB53D /* Debug */,
+				89451CA9341A1C2F5539029A4E60AF78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6E906B887F3B1DAB65E3FFE4C14FC50 /* Build configuration list for PBXNativeTarget "Pods-Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83351AD025D02CBAEB5767DB76AD69F6 /* Debug */,
+				7FEABCF6A2C61FBC1F51F513791460D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F48C390735EB9236ED7203AF1942BB02 /* Build configuration list for PBXNativeTarget "Pods-ExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D49CDA3D2F689957288788D4DD0F7A5D /* Debug */,
+				663409C39F6C7F7BD67E33E8535667CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

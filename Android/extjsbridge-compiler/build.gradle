@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(':extjsbridge-annotations')
+    implementation rootProject.ext.dependencies.service
+    annotationProcessor rootProject.ext.dependencies.service
+    implementation rootProject.ext.dependencies.javapoet
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
+sourceCompatibility = rootProject.ext.java.sourceCompatibility
+targetCompatibility = rootProject.ext.java.targetCompatibility
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
