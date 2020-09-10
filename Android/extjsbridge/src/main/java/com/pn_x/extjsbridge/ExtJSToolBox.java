@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -64,7 +65,12 @@ public class ExtJSToolBox {
             type = ExtJSValueTypeString;
             valueStr = String.valueOf(wrapValue);
         }
-        return String.format("%s/%s", type, valueStr);
+        try {
+            return String.format("%s/%s", type, URLEncoder.encode(valueStr, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return String.format("%s/%s", ExtJSValueTypeString, "");
+        }
     }
 
     public static String getSyncReplyResult(Object result) {
