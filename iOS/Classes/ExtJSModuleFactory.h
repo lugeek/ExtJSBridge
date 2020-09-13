@@ -10,6 +10,17 @@
 NS_ASSUME_NONNULL_BEGIN
 @class ExtJSModule;
 
+@interface ExtJSModuleInfo : NSObject
+
+@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *JSModuleClass;
+@property (nonatomic, strong, readonly) Class cls;
+@property (nonatomic, strong, readonly) NSDictionary *methodMap;
+@property (nonatomic, strong, readonly) NSMutableSet *messageSet;
+@property (nonatomic, assign, readonly) BOOL isCoreModule;
+
+@end
+
 @interface ExtJSModuleFactory : NSObject
 
 + (instancetype)singleton;
@@ -18,13 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)registerModuleClasses:(NSArray <Class> *)moduleClasses;
 
-- (Class)moduleClassWithName:(NSString *)name;
+- (ExtJSModuleInfo *)moduleInfoWithName:(NSString *)name;
 
-- (NSSet *)moduleMessagesWithName:(NSString *)name;
-
-- (NSDictionary *)moduleMethodsWithName:(NSString *)name;
-
-- (NSString *)JSModuleClassWithName:(NSString *)name;
+- (NSDictionary <NSString *, ExtJSModuleInfo *> *)allCoreModuleInfo;
 
 @end
 

@@ -10,7 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const ExtJSModuleNameBin;
+#define EXT_JS_SYNC_METHOD(methodName) -(id)methodName:(id)arg
+#define EXT_JS_ASYNC_METHOD(methodName) -(id)methodName:(id)arg callback:(ExtJSCallback)callback
 
 @class ExtJSBridge;
 
@@ -26,13 +27,14 @@ extern NSString * const ExtJSModuleNameBin;
 
 //override by subclass, you can reset your module state here
 - (void)handleURLChanged:(NSURL *)URL;
-
 //override by subclass
 + (NSArray *)exportMessages;
-//override by subclass
+//override by subclass, @key:methodName @value:isSync
 + (NSDictionary *)exportMethods;
 //override by subclass, reserved name: @"bin"
 + (NSString *)moduleName;
+//override by subclass
++ (NSString *)moduleDescription;
 
 @end
 

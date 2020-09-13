@@ -9,16 +9,13 @@
 #import "ExtJSModuleFactory.h"
 #import "ExtJSModule.h"
 #import "ExtJSToolBox.h"
-#import "ExtJSSession.h"
 #import "ExtJSCleaner.h"
 
-
-#define URL_KEYPATH @"URL"
+#define WEBVIEW_URL_KEYPATH @"URL"
 
 @interface ExtJSWebViewBridge()<WKUIDelegate>
 
 @property (nonatomic, weak) id<WKUIDelegate> realUIDelegate;
-@property (nonatomic, strong) NSMutableDictionary *moduleInstanceCache;
 
 @end
 
@@ -32,18 +29,9 @@
     self = [super initWithName:name];
     if (self) {
         _webView = webView;
-        [_webView addObserver:self forKeyPath:URL_KEYPATH options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
-        _moduleInstanceCache = [NSMutableDictionary dictionary];
+        [_webView addObserver:self forKeyPath:WEBVIEW_URL_KEYPATH options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
     }
     return self;
-}
-
-- (nullable ExtJSModule *)moduleInstanceWithName:(NSString *)moduleName {
-    return _moduleInstanceCache[moduleName];
-}
-
-- (void)removeModuleInstanceWithName:(NSString *)moduleName {
-    _moduleInstanceCache[moduleName] = nil;
 }
 
 - (UIViewController *)currentController {
@@ -68,47 +56,15 @@
 }
 
 - (void)dealloc {
-    [_webView removeObserver:self forKeyPath:URL_KEYPATH];
-}
-#pragma mark - Bin
-- (void)handleBinSession:(ExtJSSession *)session webView:(WKWebView *)webView handler:(void (^)(NSString * _Nullable result))handler {
-    if ([session.action isEqualToString:@"installModule"]) {
-        NSArray *array = session.value;
-        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        for (NSString *name in array) {
-            NSString *JSModuleClass = [[ExtJSModuleFactory singleton] JSModuleClassWithName:name];
-            if (JSModuleClass) {
-                dic[name] = JSModuleClass;
-            }
-        }
-        handler([ExtJSToolBox convertNativeValue:dic]);
-        return;
-    }
-    if ([session.action isEqualToString:@"requireModule"]) {
-        ExtJSModule *moduleInstance = _moduleInstanceCache[session.value];
-        if (!moduleInstance) {
-            Class moduleClass = [[ExtJSModuleFactory singleton] moduleClassWithName:session.value];
-            if (moduleClass) {
-                moduleInstance = [[moduleClass alloc] initWithBridge:self];
-                _moduleInstanceCache[session.value] = moduleInstance;
-            }
-        }
-        if (!moduleInstance) {
-            handler([ExtJSToolBox convertNativeValue:@"0"]);
-        } else {
-            handler([ExtJSToolBox convertNativeValue:@"1"]);
-        }
-        return;
-    }
-    handler(@"");
+    [_webView removeObserver:self forKeyPath:WEBVIEW_URL_KEYPATH];
 }
 
 #pragma mark - observe
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:URL_KEYPATH] && object == _webView) {
+    if ([keyPath isEqualToString:WEBVIEW_URL_KEYPATH] && object == _webView) {
         NSURL *URL = change[NSKeyValueChangeNewKey];
-        for (NSString *key in _moduleInstanceCache) {
-            ExtJSModule *instance = _moduleInstanceCache[key];
+        for (NSString *key in self.moduleInstanceCache) {
+            ExtJSModule *instance = self.moduleInstanceCache[key];
             [instance handleURLChanged:URL];
         }
         return;
@@ -177,57 +133,58 @@
         [self.currentController presentViewController:controller animated:YES completion:nil];
         return;
     }
-    ExtJSSession *session = [[ExtJSSession alloc] initWithCompactSession:defaultText];
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    NSLog(@"timer start");
+    ExtJSSession *session = [ExtJSToolBox parseCompactSession:defaultText];
     if (!session) {
-        completionHandler(@"");
+        completionHandler(ExtJSCompactValueFalse);
         return;
     }
-    if ([session.target isEqual:@"bin"]) {
-        [self handleBinSession:session webView:webView handler:completionHandler];
+    if ([self.name isEqualToString:session[ExtJSSessionKeyTarget]] ) {
+        if ([@"loadCore" isEqualToString:session[ExtJSSessionKeyAction]]) {
+            id ret = [self loadCore];
+            completionHandler([ExtJSToolBox compactValue:ret]);
+            NSLog(@"timer end");
+            return;
+        }
+        completionHandler(ExtJSCompactValueFalse);
         return;
     }
     NSString *oldURLString = webView.URL.absoluteString;
-    ExtJSModule *moduleInstance = _moduleInstanceCache[session.target];
+    ExtJSModule *moduleInstance = self.moduleInstanceCache[session[ExtJSSessionKeyTarget]];
     if (!moduleInstance) {
-        Class moduleClass = [[ExtJSModuleFactory singleton] moduleClassWithName:session.value];
-        if (moduleClass) {
-            moduleInstance = [[moduleClass alloc] initWithBridge:self];
-            _moduleInstanceCache[session.value] = moduleInstance;
-        }
-    }
-    if (!moduleInstance) {
-        completionHandler([ExtJSToolBox convertNativeValue:@(0)]);
+        completionHandler(ExtJSCompactValueFalse);
         return;
     }
-    NSDictionary *dic = [[ExtJSModuleFactory singleton] moduleMethodsWithName:session.target];
-    NSNumber *isSync = dic[session.action];
+    NSDictionary *dic = [[ExtJSModuleFactory singleton] moduleInfoWithName:session[ExtJSSessionKeyTarget]].methodMap;
+    NSNumber *isSync = dic[session[ExtJSSessionKeyAction]];
     if (isSync == nil) {
-        completionHandler([ExtJSToolBox convertNativeValue:@(0)]);
+        completionHandler(ExtJSCompactValueFalse);
         return;
     }
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if ([isSync boolValue]) {
-        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:", session.action]);
-        id ret = [moduleInstance performSelector:selector withObject:session.value];
-        NSString *JSValue = [ExtJSToolBox convertNativeValue:ret];
-        completionHandler(JSValue);
+        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:", session[ExtJSSessionKeyAction]]);
+        id ret = [moduleInstance performSelector:selector withObject:session[ExtJSSessionKeyValue]];
+        completionHandler([ExtJSToolBox compactValue:ret]);
+        NSLog(@"timer end");
         return;
     }
-    NSString *name = self.name;
     __weak WKWebView *weakWebView = webView;
-    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:callback:", session.action]);
-    ExtJSCompactSession *cleanCompactSesstion = [ExtJSToolBox createCompactSessionWithTarget:session.target action:session.action sID:session.sID compactValue:@"N/0"];
-    ExtJSRunnableJS *cleanJS = [ExtJSToolBox createRunnableJSWithBridgeName:name function:ExtJSCallbackFunctionFail compactSession:cleanCompactSesstion];
+    SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:callback:", session[ExtJSSessionKeyAction]]);
+    NSMethodSignature *signature = [moduleInstance methodSignatureForSelector:selector];
+    ExtJSCompactSession *cleancompactSession = [ExtJSToolBox compactSessionWithTarget:session[ExtJSSessionKeyTarget] action:session[ExtJSSessionKeyAction] sID:ExtJSSessionKeySID valueType:ExtJSValueTypeBool value:@"false"];
+    ExtJSRunnableJS *cleanJS = [ExtJSToolBox createWithFunction:ExtJSCallbackFunctionFail compactSession:cleancompactSession];
     ExtJSCleaner *cleaner = [[ExtJSCleaner alloc] initWithDeallocBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakWebView evaluateJavaScript:cleanJS completionHandler:nil];
         });
     }];
     ExtJSCallback callback = ^(ExtJSCallbackFunction *function, _Nullable id result) {
-        ExtJSCompactValue *compactValue = [ExtJSToolBox convertNativeValue:result];
-        ExtJSCompactSession *compactSesstion = [ExtJSToolBox createCompactSessionWithTarget:session.target action:session.action sID:session.sID compactValue:compactValue];
-        ExtJSRunnableJS *callbackJS = [ExtJSToolBox createRunnableJSWithBridgeName:name function:function compactSession:compactSesstion];
+        ExtJSValueType *valueType = [ExtJSToolBox getValueType:result];
+        NSString *value = [ExtJSToolBox convertValue:result];
+        ExtJSCompactSession *compactSession = [ExtJSToolBox compactSessionWithTarget:session[ExtJSSessionKeyTarget] action:session[ExtJSSessionKeyAction] sID:session[ExtJSSessionKeySID] valueType:valueType value:value];
+        ExtJSRunnableJS *callbackJS = [ExtJSToolBox createWithFunction:function compactSession:compactSession];
         if ([NSThread currentThread].isMainThread) {
             if (![ExtJSToolBox compareURLString:oldURLString withAnotherURLString:weakWebView.URL.absoluteString]) {
                 return;
@@ -248,9 +205,14 @@
             });
         }
     };
-    id ret = [moduleInstance performSelector:selector withObject:session.value withObject:callback];
-    NSString *JSValue = [ExtJSToolBox convertNativeValue:ret];
-    completionHandler(JSValue);
+    id ret = [moduleInstance performSelector:selector withObject:session[ExtJSSessionKeyValue] withObject:callback];
+    if (strcmp(signature.methodReturnType, @encode(void))) {
+        completionHandler(ExtJSCompactValueTrue);
+        NSLog(@"timer end");
+        return;
+    }
+    completionHandler([ExtJSToolBox compactValue:ret]);
+    NSLog(@"timer end");
     #pragma clang diagnostic pop
 }
 

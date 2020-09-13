@@ -31,12 +31,12 @@
     return window;
 }
 
-- (id)close:(id)arg {
+EXT_JS_SYNC_METHOD(close) {
     [(UINavigationController *)self.rootWindow.rootViewController popViewControllerAnimated:YES];
     return nil;
 }
 
-- (id)open:(id)arg {
+EXT_JS_SYNC_METHOD(open) {
     if (![arg isKindOfClass:[NSString class]]) {
         return nil;
     }
@@ -50,11 +50,11 @@
     return nil;
 }
 
-- (id)setTitle:(id)arg {
+EXT_JS_SYNC_METHOD(setTitle) {
     if (![arg isKindOfClass:[NSString class]]) {
         return nil;
     }
-    self.rootWindow.rootViewController.title = arg;
+    ((UINavigationController *)self.rootWindow.rootViewController).visibleViewController.title = arg;
     return nil;
 }
 

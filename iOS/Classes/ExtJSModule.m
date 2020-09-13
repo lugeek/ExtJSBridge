@@ -11,8 +11,6 @@
 #import "ExtJSToolBox.h"
 #import "ExtJSModuleFactory.h"
 
-NSString * const ExtJSModuleNameBin = @"bin";
-
 @interface ExtJSModule()
 
 @end
@@ -33,21 +31,19 @@ NSString * const ExtJSModuleNameBin = @"bin";
 }
 
 - (void)postMessage:(NSString *)message object:(nullable id)object {
-    NSSet *set = [[ExtJSModuleFactory singleton] moduleMessagesWithName:self.name];
+    NSSet *set = [[ExtJSModuleFactory singleton] moduleInfoWithName:self.name].messageSet;
     assert(message != nil && message.length > 0 && [set containsObject:message]);
     if (![set containsObject:message]) {
         return;
     }
     if ([_bridge isKindOfClass:[ExtJSWebViewBridge class]]) {
         WKWebView *webView = ((ExtJSWebViewBridge *)_bridge).webView;
-        NSString *name = _bridge.name;
-        ExtJSCompactValue *compactValue = [ExtJSToolBox convertNativeValue:object];
-        [webView evaluateJavaScript:[ExtJSToolBox createleRunnableJSWithBridgeName:name target:self.name message:message compactValue:compactValue] completionHandler:nil];
+        ExtJSCompactValue *compactValue = [ExtJSToolBox convertValue:object];
+        [webView evaluateJavaScript:[ExtJSToolBox createWithTarget:self.name message:message compactValue:compactValue] completionHandler:nil];
     } else {
         JSContext *context = ((ExtJSContextBridge *)_bridge).context;
-        NSString *name = _bridge.name;
-        NSString *compactValue = [ExtJSToolBox convertNativeValue:object];
-        [context evaluateScript:[ExtJSToolBox createleRunnableJSWithBridgeName:name target:self.name message:message compactValue:compactValue]];
+        NSString *compactValue = [ExtJSToolBox convertValue:object];
+        [context evaluateScript:[ExtJSToolBox createWithTarget:self.name message:message compactValue:compactValue]];
     }
 }
 
@@ -67,10 +63,8 @@ NSString * const ExtJSModuleNameBin = @"bin";
     return NSStringFromClass([self class]);
 }
 
-- (void)dealloc {
-#if DEBUG
-    NSLog(@"[ExtJSModule]:%@ - delloced", self);
-#endif
++ (NSString *)moduleDescription {
+    return @"";
 }
 
 @end

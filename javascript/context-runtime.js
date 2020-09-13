@@ -24,11 +24,11 @@
             }
             set.delete(handler);
         }
-        removeListenerForMessage(messageName) {
+        removeListenerForMessageName(messageName) {
             this.map.set(messageName, new Set());
         }
         post (messageName, value) {
-            value = ext.parseShortString(value).value;
+            value = ext.parseCompactValue(value).value;
             let msg = new ExtMessage(messageName, value);
             let set = this.map.get(messageName);
             if (set == null || set == undefined) {
@@ -39,18 +39,6 @@
             });
         }
     };
-    class ExtSession {
-        constructor(target, action, params) {
-            this.sID = ext.nextId();
-            this.target = target;
-            this.action = action;
-            this.params = params;
-            this.formatedValue = ext.formatJSValue(params);
-        };
-        compact() {
-            return this.target + "/" + this.action + "/" + this.sID + "/" + this.formatedValue;
-        };
-    };
     let bridge = {
         _sID : -1,
         //session map
@@ -59,104 +47,48 @@
         _mcm : new Map(),
         //module Instance Map
         _mim : new Map(),
+        //compact Session Variable List
+        _cskl : ["target", "action", "sID", "valueType", "value"],
+        //compact Value Variable List
+        _cvkl : ["valueType", "value"],
         _platform : "unkown",
+        _contextType : "jsvm",
+        _globalObject : globalThis,
+        _coreLoaded : false,
         nextId : function () {
             return ++this._sID;
         },
-        installModule : function (names) {
-            if (!(names instanceof String) && typeof names != 'string' && !(names instanceof Array)) {
-                console.error("TypeError: invalid names type" + typeof names);
-                return;
-            }
-            if (!(names instanceof Array)) {
-                names = [names];
-            }
-            let moduleNameSet = new Set();
-            for (var i = 0; i < names.length; i++) {
-                var name = names[i];
-                var moduleClass = this._mcm.get(name);
-                if (!moduleClass) {
-                    moduleNameSet.add(name);
-                }
-            }
-            if (moduleNameSet.size == 0) {
-                return true;
-            }
-            let result = this._i("bin", "installModule", Array.from(moduleNameSet));
-            if (result == null || result == undefined) {
-                console.error("InstallModuleError: failed with module [" + Array.from(moduleNameSet) + "]");
-                return false;
-            }
-            var code = "";
-            for (let name in result) {
-                let item = result[name];
-                code += this._cimc(item, name);
-                moduleNameSet.delete(name);
-            }
-            globalThis.eval(code);
-            if (moduleNameSet.size > 0) {
-                console.error("InstallModuleError: failed with module [" + Array.from(moduleNameSet)) + "]";
-            }
-            return true;
-        },
-        requireModule : function (name) {
-            var instance = this._mim.get(name);
-            if (!instance) {
-                var moduleClass = this._mcm.get(name);
-                if (!moduleClass) {
-                    let state = this.installModule(name);
-                    if (!state) {
-                        return null;
-                    }
-                    moduleClass = this._mcm.get(name);
-                }
-                instance = new moduleClass;
-                instance.channel = new ExtMessageChannel;
-                this._mim.set(name, instance);
-                this._i("bin", "requireModule", name);
-            }
-            return instance;
-        },
-        formatJSValue : function (params) {
-            let typeStr = "S";
+        convertValue : function (value) {
             let valueStr = "";
-            if (typeof params == 'boolean') {
-                typeStr = "B";
-                valueStr = params;
-            } else if (typeof params == 'number') {
-                typeStr = "N";
-                valueStr = encodeURIComponent(params);
-            } else if (typeof params == 'null' || typeof params == 'undefined') {
-                typeStr = "S";
+            if (typeof value == 'boolean') {
+                valueStr = value;
+            } else if (typeof value == 'number') {
+                valueStr = value;
+            } else if (value == null || value == undefined) {
                 valueStr = "";
-            } else if (typeof params == 'string') {
-                typeStr = "S";
-                valueStr = encodeURIComponent(params);
-            } else if (params instanceof Error) {
-                typeStr = "E";
-                let error = {n:params.name, m:params.message, c:params.code?params.code:-1};
-                valueStr = encodeURIComponent(JSON.stringify(error));
-            } else if (params instanceof Array) {
-                typeStr = "A";
-                valueStr = encodeURIComponent(JSON.stringify(params));
+            } else if (typeof value == 'string') {
+                valueStr = value;
+            } else if (value instanceof Error) {
+                let error = {n:value.name, m:value.message, c:value.code?value.code:-1};
+                valueStr = JSON.stringify(error);
+            } else if (value instanceof Array) {
+                valueStr = JSON.stringify(value);
             } else {
-                typeStr = "O";
                 let dic = {};
-                for (let key in params) {
-                    let item = params[key];
+                for (let key in value) {
+                    let item = value[key];
                     if (key == 'onProgress' || key == 'onSuccess' || key == 'onFail' || key == 'onComplete' || typeof item == 'function') {
                         continue;
                     }
                     dic[key] = item;
                 }
-                valueStr = encodeURIComponent(JSON.stringify(dic));
+                valueStr = JSON.stringify(dic);
             }
-            return typeStr + "/" + valueStr;
-        },
-        
-        //conver string to value
-        convertValue : function (valueType, string) {
-            let decodeString = decodeURIComponent(string);
+            return valueStr;
+        },        
+        //conver valueString to value
+        convertStringValue : function (valueType, string) {
+            let decodeString = string;
             if (valueType == "S") {
                 return decodeString;
             } else if (valueType == "N") {
@@ -182,56 +114,87 @@
             }
             return string;
         },
-        // format: type/value
-        parseShortString : function (string) {
-            if(!(string instanceof String) && typeof string != 'string') {
-                string = "";
+        getValueType : function (value) {
+            if (typeof value == 'boolean') {
+                return "B";
+            } else if (typeof value == 'number') {
+                return "N";
+            } else if (value == null || value == undefined) {
+                return "S";
+            } else if (typeof value == 'string') {
+                return "S";
+            } else if (value instanceof Error) {
+                return "E";
+            } else if (value instanceof Array) {
+                return "A";
             }
-            var uncompactSession = {valueType:"S", value:string};
-            let array = string.split("/");
-            if (array.length > 0) {
-                uncompactSession.valueType = array[0];
-            }
-            if (array.length > 1) {
-                let value = this.convertValue(array[0], array[1]);
-                if (value != null && value != undefined) {
-                    uncompactSession.value = value;
-                }
-            }
-            return uncompactSession;
+            return "O";
         },
-        parseString : function (string) {
+        //value to compactValue, format valyeType/value
+        compactValue : function (value) {
+            return this.getValueType(value) + "/" + this.convertValue(value);
+        },
+        // format: valueType/value
+        parseCompactValue : function (string) {
             if(!(string instanceof String) && typeof string != 'string') {
                 string = "";
             }
-            var uncompactSession = {valueType:"S", value:string};
-            let array = string.split("/");
-            if (array.length > 0) {
-                uncompactSession.target = array[0];
-            }
-            if (array.length > 1) {
-                uncompactSession.action = array[1];
-            }
-            if (array.length > 2) {
-                uncompactSession.sID = array[2];
-            }
-            if (array.length > 3) {
-                uncompactSession.valueType = array[3];
-            }
-            if (array.length > 4) {
-                let value = this.convertValue(array[3], array[4]);
-                if (value != null && value != undefined) {
-                    uncompactSession.value = value;
+            var result = {valueType:"S", value:string};
+            let length = string.length;
+            let start = 0;
+            let index = 0;
+            for (let i = 0; i < length; i++) {
+                if (string.charAt(i) == '/') {
+                    let key = this._cvkl[index];
+                    let value = string.substring(start, i);
+                    result[key] = value;
+                    index++;
+                    start = i + 1;
+                    if (index + 1 == this._cvkl.length) {
+                        let key = this._cvkl[index];
+                        let value = this.convertStringValue(result.valueType, string.substring(start));
+                        result[key] = value;
+                        break;
+                    }
                 }
             }
-            return uncompactSession;
+            return result;
+        },
+        compactSession : function (session) {
+            return session.target + "/" + session.action + "/" + session.sID + "/" + session.valueType + '/' + session.value;
+        },
+        // format: target/action/sID/valueType/value
+        parseCompactSession : function (string) {
+            if(!(string instanceof String) && typeof string != 'string') {
+                string = "";
+            }
+            var session = {valueType:"S", value:string};
+            let length = string.length;
+            let start = 0;
+            let index = 0;
+            for (let i = 0; i < length; i++) {
+                if (string.charAt(i) == '/') {
+                    let key = this._cskl[index];
+                    let value = string.substring(start, i);
+                    session[key] = value;
+                    index++;
+                    start = i + 1;
+                    if (index + 1 == this._cskl.length) {
+                        let key = this._cskl[index];
+                        let value = this.convertStringValue(session.valueType, string.substring(start));
+                        session[key] = value;
+                        break;
+                    }
+                }
+            }
+            return session;
         },
         generateKey : function (target, action, id) {
             return target + "/" + action + "/" + id;
         },
         // validate target / action
-        validate : function (params) {
-            if (typeof params == 'string' && params.length > 0) {
+        validate : function (string) {
+            if (typeof string == 'string' && string.length > 0) {
                 return true;
             }
             return false;
@@ -239,17 +202,52 @@
         platform : function () {
             return (native_ext != null ? native_ext.platform() : "unkown");
         },
+        _loadCore : function () {
+            if (this._coreLoaded) {
+                return;
+            }
+            this._coreLoaded = true;
+            let result = this._i("loader", "loadCore", null);
+            var code = "";
+            for (let name in result) {
+                let item = result[name];
+                code += this._cimc(item, name);
+            }
+            this._globalObject.eval(code);
+            for (let name in result) {
+                var instance = this[name];
+                if (!instance) {
+                    var moduleClass = this._mcm.get(name);
+                    if (!moduleClass) {
+                        continue;
+                    }
+                    instance = new moduleClass;
+                    instance.channel = new ExtMessageChannel;
+                    this[name] = instance;
+                }
+            }
+        },
+        _exec : function (session) {
+            return native_ext.invoke(session.target, session.action, session.sID, session.valueType, session.value);
+        },
         // create Injection Module Code
         _cimc : function (cls, name) {
             return '(function(){'+ cls +'ext._mcm.set("' + name + '", _);})();'
         },
         // invoke native target action
-        _i : function (target, action, params, isSync) {
+        _i : function (target, action, arg, isSync) {
             if (!this.validate(target) || !this.validate(action)) {
                 console.error("Invalid target or action");
                 return false;
             }
-            let session = new ExtSession(target, action, params);
+            let session = {
+                "target":target,
+                "action":action,
+                "sID":this.nextId(),
+                "valueType":this.getValueType(arg),
+                "value":this.convertValue(arg),
+                "arg":arg,
+            };
             if (!isSync) {
                 let map = this._sm.get(target);
                 if (!map) {
@@ -258,89 +256,89 @@
                 }
                 map.set(this.generateKey(target, action, session.sID), session);
             }
-            let ret = native_ext.invoke(session.target, session.action, session.sID, session.valueType, session.params);
-            let uncompactSession = this.parseShortString(ret);
-            if (uncompactSession == null || uncompactSession == undefined) {
+            let ret = this._exec(session);
+            let value = this.parseCompactValue(ret);
+            if (value == null || value == undefined) {
                 return null;
             }
-            return uncompactSession.value;
+            return value;
         },
         //session success
         _p : function (m) {
-            let uncompactSession = this.parseString(m);
-            if (uncompactSession == null || uncompactSession == undefined) {
+            let session = this.parseCompactSession(m);
+            if (session == null || session == undefined) {
                 return;
             }
-            let target = uncompactSession.target;
-            let action = uncompactSession.action;
-            let value = uncompactSession.value;
-            let sID = uncompactSession.sID;
+            let target = session.target;
+            let action = session.action;
+            let value = session.value;
+            let sID = session.sID;
             let map = this._sm.get(target);
             if (!map) {
                 return;
             }
             let key = this.generateKey(target, action, sID);
-            let session = map.get(key);
-            if (session == undefined || session == null || session.params == undefined || session.params == null) {
+            session = map.get(key);
+            if (session == undefined || session == null || session.arg == undefined || session.arg == null) {
                 return;
             }
-            if (typeof session.params.onProgress == "function") {
-                session.params.onProgress(value);
+            if (typeof session.arg.onProgress == "function") {
+                session.arg.onProgress(value);
             }
             return;
         },
         //session success
         _s : function (m) {
-            let uncompactSession = this.parseString(m);
-            if (uncompactSession == null || uncompactSession == undefined) {
+            let session = this.parseCompactSession(m);
+            if (session == null || session == undefined) {
                 return;
             }
-            let target = uncompactSession.target;
-            let action = uncompactSession.action;
-            let value = uncompactSession.value;
-            let sID = uncompactSession.sID;
+            let target = session.target;
+            let action = session.action;
+            let value = session.value;
+            let sID = session.sID;
             let map = this._sm.get(target);
             if (!map) {
                 return;
             }
             let key = this.generateKey(target, action, sID);
-            let session = map.get(key);
-            if (session == undefined || session == null || session.params == undefined || session.params == null) {
+            session = map.get(key);
+            if (session == undefined || session == null || session.arg == undefined || session.arg == null) {
                 return;
             }
-            if (typeof session.params.onSuccess == "function") {
-                session.params.onSuccess(value);
+            if (typeof session.arg.onSuccess == "function") {
+                session.arg.onSuccess(value);
             }
-            if (typeof session.params.onComplete == "function") {
-                session.params.onComplete(value);
+            if (typeof session.arg.onComplete == "function") {
+                session.arg.onComplete(value);
             }
             map.delete(key);
             return;
         },
         //fail
         _f : function (m) {
-            let uncompactSession = this.parseString(m);
-            if (uncompactSession == null || uncompactSession == undefined) {
+            let session = this.parseCompactSession(m);
+            if (session == null || session == undefined) {
                 return;
             }
-            let target = uncompactSession.target;
-            let action = uncompactSession.action;
-            let value = uncompactSession.value;
-            let sID = uncompactSession.sID;
+            let target = session.target;
+            let action = session.action;
+            let value = session.value;
+            let sID = session.sID;
             let map = this._sm.get(target);
             if (!map) {
                 return;
             }
             let key = this.generateKey(target, action, sID);
-            let session = map.get(key);
-            if (session == undefined || session == null || session.params == undefined || session.params == null) {
+            session = map.get(key);
+            if (session == undefined || session == null || session.arg == undefined || session.arg == null) {
                 return;
             }
-            if (typeof session.params.onFail == "function") {
-                session.params.onFail(value);
+            if (typeof session.arg.onFail == "function") {
+                session.arg.onFail(value);
             }
-            if (typeof session.params.onComplete == "function") {
-                session.params.onComplete(value);
+            if (typeof session.arg.onComplete == "function") {
+                session.arg.onComplete(value);
             }
             map.delete(key);
         },
@@ -349,4 +347,5 @@
     if (globalThis.ext == null || globalThis.ext == undefined) {
         globalThis.ext = bridge;
     }
+    bridge._loadCore();
 })();

@@ -26,7 +26,7 @@
     return window;
 }
 
-- (id)show:(id)arg {
+EXT_JS_SYNC_METHOD(show) {
     if (![arg isKindOfClass:[NSDictionary class]]) {
         return nil;
     }

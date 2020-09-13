@@ -12,7 +12,7 @@
 - (instancetype)initWithDeallocBlock:(dispatch_block_t)block {
     self = [super init];
     if (self) {
-        self.block = block;
+        _block = block;
     }
     return self;
 }

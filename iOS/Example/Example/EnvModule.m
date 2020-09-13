@@ -10,25 +10,19 @@
 
 @implementation EnvModule
 
-- (id)platformSync:(id)arg {
+EXT_JS_SYNC_METHOD(platformSync) {
     return @"iOS";
 }
 
-- (void)platform:(id)arg callback:(ExtJSCallback)callback {
+EXT_JS_ASYNC_METHOD(platform) {
     callback(ExtJSCallbackFunctionSuccess, @"iOS");
-}
-
-- (void)networkType:(id)arg callback:(ExtJSCallback)callback {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        callback(ExtJSCallbackFunctionProgress, @"WIFI");
-    });
+    return nil;
 }
 
 + (NSDictionary *)exportMethods {
     return @{
         @"platformSync":@YES,
         @"platform":@NO,
-        @"networkType":@NO,
     };
 }
 

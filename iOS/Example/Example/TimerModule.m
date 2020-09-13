@@ -46,7 +46,7 @@
     return self;
 }
 
-- (id)setTimeout:(id)arg callback:(ExtJSCallback)callback {
+EXT_JS_ASYNC_METHOD(setTimeout) {
     NSInteger second = [arg[@"millseconds"] integerValue] / 1000;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(second * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         callback(ExtJSCallbackFunctionSuccess, nil);
@@ -54,7 +54,7 @@
     return nil;
 }
 
-- (id)setInterval:(id)arg callback:(ExtJSCallback)callback {
+EXT_JS_ASYNC_METHOD(setInterval) {
     NSInteger second = [arg[@"millseconds"] integerValue] / 1000;
     TimerHandler *handler = [TimerHandler new];
     handler.target = self;
@@ -67,7 +67,7 @@
     return key;
 }
 
-- (id)clearInterval:(id)arg {
+EXT_JS_ASYNC_METHOD(clearInterval) {
     if (![arg isKindOfClass:[NSNumber class]] || _timerDic[arg] == nil) {
         return nil;
     }

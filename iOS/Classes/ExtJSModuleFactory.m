@@ -8,14 +8,16 @@
 #import "ExtJSModuleFactory.h"
 #import "ExtJSToolBox.h"
 #import "ExtJSModule.h"
+#import "ExtJSCoreModule.h"
 
-@interface ExtJSModuleInfo : NSObject
+@interface ExtJSModuleInfo()
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *JSModuleClass;
-@property (nonatomic, strong) Class cls;
-@property (nonatomic, strong) NSDictionary *methodMap;
-@property (nonatomic, strong) NSMutableSet *messageSet;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *JSModuleClass;
+@property (nonatomic, strong, readwrite) Class cls;
+@property (nonatomic, strong, readwrite) NSDictionary *methodMap;
+@property (nonatomic, strong, readwrite) NSMutableSet *messageSet;
+@property (nonatomic, assign, readwrite) BOOL isCoreModule;
 
 @end
 
@@ -25,7 +27,8 @@
 
 @interface ExtJSModuleFactory()
 
-@property (nonatomic, strong) NSMutableDictionary *moduleInfoMap;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, ExtJSModuleInfo *>*coreModuleInfoMap;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, ExtJSModuleInfo *>*moduleInfoMap;
 @property (nonatomic, strong) NSLock *lock;
 
 @end
@@ -44,6 +47,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _coreModuleInfoMap = [NSMutableDictionary dictionary];
         _moduleInfoMap = [NSMutableDictionary dictionary];
         _lock = [[NSLock alloc] init];
     }
@@ -51,29 +55,18 @@
 }
 
 - (void)registerModuleClass:(Class)moduleClass {
-    assert([moduleClass isSubclassOfClass:[ExtJSModule class]]);
-    [_lock lock];
-    
-    NSString *moduleName = [moduleClass moduleName];
-    NSString *JSModuleClass = [ExtJSToolBox createJSModuleClassFromModuleClass:moduleClass];
-    NSMutableDictionary *methodMap = [NSMutableDictionary dictionaryWithDictionary:[moduleClass exportMethods]];
-    NSMutableSet *messageSet = [NSMutableSet setWithArray:[moduleClass exportMessages]];
-    
-    ExtJSModuleInfo *info = [ExtJSModuleInfo new];
-    info.cls = moduleClass;
-    info.name = moduleName;
-    info.methodMap = methodMap;
-    info.messageSet = messageSet;
-    info.JSModuleClass = JSModuleClass;
-    
-    _moduleInfoMap[moduleName] = info;
-    [_lock unlock];
+    [self registerModuleClasses:@[moduleClass]];
 }
 
 - (void)registerModuleClasses:(NSArray <Class> *)moduleClasses {
     [_lock lock];
     for (Class moduleClass in moduleClasses) {
+        assert([moduleClass isSubclassOfClass:[ExtJSModule class]]);
+        
         NSString *moduleName = [moduleClass moduleName];
+        
+        assert(_moduleInfoMap[moduleName] == nil);
+        
         NSString *JSModuleClass = [ExtJSToolBox createJSModuleClassFromModuleClass:moduleClass];
         NSMutableDictionary *methodMap = [NSMutableDictionary dictionaryWithDictionary:[moduleClass exportMethods]];
         NSMutableSet *messageSet = [NSMutableSet setWithArray:[moduleClass exportMessages]];
@@ -84,47 +77,31 @@
         info.methodMap = methodMap;
         info.messageSet = messageSet;
         info.JSModuleClass = JSModuleClass;
+        info.isCoreModule = false;
         
+        if ([moduleClass isSubclassOfClass:[ExtJSCoreModule class]]) {
+            _coreModuleInfoMap[moduleName] = info;
+            info.isCoreModule = true;
+        }
         _moduleInfoMap[moduleName] = info;
     }
     [_lock unlock];
 }
 
-- (Class)moduleClassWithName:(NSString *)name {
+- (ExtJSModuleInfo *)moduleInfoWithName:(NSString *)name {
     assert(name != nil);
     ExtJSModuleInfo *info = nil;
     [_lock lock];
     info = _moduleInfoMap[name];
     [_lock unlock];
-    return info.cls;
+    return info;
 }
 
-- (NSSet *)moduleMessagesWithName:(NSString *)name {
-    assert(name != nil);
-    ExtJSModuleInfo *info = nil;
+- (NSDictionary <NSString *, ExtJSModuleInfo *> *)allCoreModuleInfo {
+    NSDictionary *dic = nil;
     [_lock lock];
-    info = _moduleInfoMap[name];
+    dic = [_coreModuleInfoMap copy];
     [_lock unlock];
-    return info.messageSet;
+    return dic;
 }
-
-- (NSDictionary *)moduleMethodsWithName:(NSString *)name {
-    assert(name != nil);
-    ExtJSModuleInfo *info = nil;
-    [_lock lock];
-    info = _moduleInfoMap[name];
-    [_lock unlock];
-    return info.methodMap;
-}
-
-
-- (NSString *)JSModuleClassWithName:(NSString *)name {
-    assert(name != nil);
-    ExtJSModuleInfo *info = nil;
-    [_lock lock];
-    info = _moduleInfoMap[name];
-    [_lock unlock];
-    return info.JSModuleClass;
-}
-
 @end

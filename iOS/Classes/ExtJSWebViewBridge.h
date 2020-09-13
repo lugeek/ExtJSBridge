@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ExtJSWebViewBridge : ExtJSBridge
-
+//the connected webView
 @property (nonatomic, weak, nullable, readonly) WKWebView *webView;
 
 - (instancetype)initWithName:(NSString *)name webView:(WKWebView *)webView;

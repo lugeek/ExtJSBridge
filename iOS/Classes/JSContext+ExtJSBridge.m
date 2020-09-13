@@ -19,7 +19,7 @@
 }
 
 - (void)ext_initializeBridge {
-    [self ext_initializeBridgeWithName:@"ext"];
+    [self ext_initializeBridgeWithName:ExtJSBridgeDefaultName];
 }
 
 - (void)ext_initializeBridgeWithName:(NSString *)name {

@@ -24,17 +24,15 @@
     [super viewDidLoad];
     self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:[WKWebViewConfiguration new]];
     self.view.backgroundColor = [UIColor whiteColor];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.webView ext_initializeBridge];
-        [self.view addSubview:self.webView];
-        NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"]];
-        [self.webView loadFileURL:url allowingReadAccessToURL:url];
-    });
+    [self.webView ext_initializeBridge];
+    [self.view addSubview:self.webView];
+    NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"]];
+    [self.webView loadFileURL:url allowingReadAccessToURL:url];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NavigatorModule *module = (NavigatorModule *)[self.webView.ext_bridge moduleInstanceWithName:@"navigator"];
+    NavigatorModule *module = (NavigatorModule *)self.webView.ext_bridge.moduleInstanceCache[@"navigator"];
     [module handleViewDidAppear];
 }
 

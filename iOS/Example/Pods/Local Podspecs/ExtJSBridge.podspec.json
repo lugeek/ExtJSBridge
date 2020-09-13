@@ -18,6 +18,5 @@
   "exclude_files": "iOS/Classes/Exclude",
   "platforms": {
     "ios": "9.0"
-  },
-  "swift_version": "5.0"
+  }
 }
