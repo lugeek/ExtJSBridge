@@ -165,7 +165,13 @@
     }
     if ([isSync boolValue]) {
         SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:", session[ExtJSSessionKeyAction]]);
+        NSMethodSignature *signature = [moduleInstance methodSignatureForSelector:selector];
         id ret = [moduleInstance performSelector:selector withObject:session[ExtJSSessionKeyValue]];
+        if (strcmp(signature.methodReturnType, @encode(void)) == 0) {
+            completionHandler(ExtJSCompactValueTrue);
+            EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
+            return;
+        }
         completionHandler([ExtJSToolBox compactValue:ret]);
         EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
         return;

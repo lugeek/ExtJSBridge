@@ -67,7 +67,7 @@ EXT_JS_ASYNC_METHOD(setInterval) {
     return key;
 }
 
-EXT_JS_ASYNC_METHOD(clearInterval) {
+EXT_JS_SYNC_METHOD(clearInterval) {
     if (![arg isKindOfClass:[NSNumber class]] || _timerDic[arg] == nil) {
         return nil;
     }

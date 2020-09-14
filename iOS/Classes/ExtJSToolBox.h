@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define EXT_TIME_PROFILER_RECORD(profiler, desc)    ({\
                                                         CFTimeInterval interval = CACurrentMediaTime() - profiler;\
                                                         if (interval>0.015) {\
-                                                            printf("#EXT_TIME_PROFILER#⚠️\nprofiler:%s,\ntime:%.6f,\ndesc:%s\n\n", #profiler, interval, desc.UTF8String);\
+                                                            printf("#EXT_TIME_PROFILER#⚠️\nfile:%s\nfunction:%s\nline:%d\nprofiler:%s\ntime:%.6f\ndesc:%s\n\n", __FILE__, __FUNCTION__, __LINE__, #profiler, interval, desc.UTF8String);\
                                                         } else {\
-                                                            printf("#EXT_TIME_PROFILER#\nprofiler:%s,\ntime:%.6f,\ndesc:%s\n\n", #profiler, interval, desc.UTF8String);\
+                                                            printf("#EXT_TIME_PROFILER#\nfile:%s\nfunction:%s\nline:%d\nprofiler:%s\ntime:%.6f\ndesc:%s\n\n", __FILE__, __FUNCTION__, __LINE__, #profiler, interval, desc.UTF8String);\
                                                         }\
                                                     });
 
