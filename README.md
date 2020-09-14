@@ -8,8 +8,7 @@ With ExtJSBridge you can develop your hybrid app in a delightful way, it`s easy 
 * Support **sync** and **async** method.
 
 * Support event bus (notification).
-* ThreadSafe API.
-* 100% test case coverage.
+
 
 ## Requirement
 
