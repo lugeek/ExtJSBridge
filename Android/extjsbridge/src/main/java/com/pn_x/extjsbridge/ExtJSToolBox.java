@@ -63,14 +63,15 @@ public class ExtJSToolBox {
             valueStr = String.valueOf((Number)wrapValue);
         } else {
             type = ExtJSValueTypeString;
-            valueStr = String.valueOf(wrapValue);
+            try {
+                valueStr = URLEncoder.encode(String.valueOf(wrapValue), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                type = ExtJSValueTypeError;
+                valueStr = getJSError(e).toString();
+            }
         }
-        try {
-            return String.format("%s/%s", type, URLEncoder.encode(valueStr, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return String.format("%s/%s", ExtJSValueTypeString, "");
-        }
+        return String.format("%s/%s", type, valueStr);
     }
 
     public static String getSyncReplyResult(Object result) {
