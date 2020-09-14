@@ -9,6 +9,14 @@
 #import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+#ifdef DEBUG
+#define EXT_TIME_PROFILER_LAUNCH(profiler) CFTimeInterval profiler = CACurrentMediaTime();
+#define EXT_TIME_PROFILER_RECORD(profiler, desc) NSLog(@"EXT_TIME_PROFILER:[%s], time:[%.6f], desc:[%@]", #profiler, CACurrentMediaTime() - profiler, desc);
+#else
+#define EXT_TIME_PROFILER_LAUNCH(profiler)
+#define EXT_TIME_PROFILER_RECORD(profiler)
+#endif
+
 
 typedef NSString ExtJSValueType;
 extern ExtJSValueType * const ExtJSValueTypeString;

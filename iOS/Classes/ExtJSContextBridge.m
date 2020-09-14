@@ -45,10 +45,13 @@ JSExportAs(invoke, - (id)invokeTarget:(NSString *)target action:(NSString *)acti
 }
 
 - (id)invokeTarget:(NSString *)target action:(NSString *)action sID:(NSString *)sID valueType:(NSString *)valueType value:(id)value {
+    EXT_TIME_PROFILER_LAUNCH(sessionTimeProfiler);
     if ([self.name isEqualToString:target] ) {
         if ([@"loadCore" isEqualToString:action]) {
             id ret = [self loadCore];
-            return [ExtJSToolBox compactValue:ret];
+            id compactValue = [ExtJSToolBox compactValue:ret];
+            EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"loadCore");
+            return compactValue;
         }
         return ExtJSCompactValueFalse;
     }
@@ -65,11 +68,19 @@ JSExportAs(invoke, - (id)invokeTarget:(NSString *)target action:(NSString *)acti
     #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if ([isSync boolValue]) {
         SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:", action]);
+        NSMethodSignature *signature = [moduleInstance methodSignatureForSelector:selector];
         id ret = [moduleInstance performSelector:selector withObject:[ExtJSToolBox convertStringValue:value valueType:valueType]];
-        return [ExtJSToolBox compactValue:ret];
+        if (strcmp(signature.methodReturnType, @encode(void)) == 0) {
+            EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
+            return ExtJSCompactValueTrue;
+        }
+        id compactValue = [ExtJSToolBox compactValue:ret];
+        EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
+        return compactValue;
     }
     __weak JSContext *context = _context;
     SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:callback:", action]);
+    NSMethodSignature *signature = [moduleInstance methodSignatureForSelector:selector];
     ExtJSCompactSession *compactSesstion = [ExtJSToolBox compactSessionWithTarget:target action:action sID:sID valueType:ExtJSValueTypeBool value:@"0"];
     ExtJSRunnableJS *cleanJS = [ExtJSToolBox createWithFunction:ExtJSCallbackFunctionFail compactSession:compactSesstion];
     ExtJSCleaner *cleaner = [[ExtJSCleaner alloc] initWithDeallocBlock:^{
@@ -84,7 +95,13 @@ JSExportAs(invoke, - (id)invokeTarget:(NSString *)target action:(NSString *)acti
         cleaner.cancel = YES;
     };
     id ret = [moduleInstance performSelector:selector withObject:[ExtJSToolBox convertStringValue:value valueType:valueType] withObject:callback];
-    return [ExtJSToolBox compactValue:ret];
+    if (strcmp(signature.methodReturnType, @encode(void)) == 0) {
+        EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
+        return ExtJSCompactValueTrue;
+    }
+    id compactValue = [ExtJSToolBox compactValue:ret];
+    EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
+    return compactValue;
     #pragma clang diagnostic pop
 }
 

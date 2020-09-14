@@ -39,12 +39,17 @@
             });
         }
     };
+    if (globalThis.ExtMessageChannel == null) {
+        globalThis.ExtMessageChannel = ExtMessageChannel;
+    }
     let bridge = {
         _sID : -1,
         //session map
         _sm : new Map(),
         //module Class Map
         _mcm : new Map(),
+        //core module instance Map
+        _cmim : new Map(),
         //module Instance Map
         _mim : new Map(),
         //compact Session Variable List
@@ -57,6 +62,22 @@
         _coreLoaded : false,
         nextId : function () {
             return ++this._sID;
+        },
+        getValueType : function (value) {
+            if (typeof value == 'boolean') {
+                return "B";
+            } else if (typeof value == 'number') {
+                return "N";
+            } else if (value == null || value == undefined) {
+                return "S";
+            } else if (typeof value == 'string') {
+                return "S";
+            } else if (value instanceof Error) {
+                return "E";
+            } else if (value instanceof Array) {
+                return "A";
+            }
+            return "O";
         },
         convertValue : function (value) {
             let valueStr = "";
@@ -85,7 +106,7 @@
                 valueStr = JSON.stringify(dic);
             }
             return valueStr;
-        },        
+        },
         //conver valueString to value
         convertStringValue : function (valueType, string) {
             let decodeString = string;
@@ -113,22 +134,6 @@
                 return object;
             }
             return string;
-        },
-        getValueType : function (value) {
-            if (typeof value == 'boolean') {
-                return "B";
-            } else if (typeof value == 'number') {
-                return "N";
-            } else if (value == null || value == undefined) {
-                return "S";
-            } else if (typeof value == 'string') {
-                return "S";
-            } else if (value instanceof Error) {
-                return "E";
-            } else if (value instanceof Array) {
-                return "A";
-            }
-            return "O";
         },
         //value to compactValue, format valyeType/value
         compactValue : function (value) {
@@ -207,13 +212,13 @@
                 return;
             }
             this._coreLoaded = true;
-            let result = this._i("loader", "loadCore", null);
+            let result = this._i("ext", "loadCore", null);
             var code = "";
             for (let name in result) {
                 let item = result[name];
                 code += this._cimc(item, name);
             }
-            this._globalObject.eval(code);
+            globalThis.eval(code);
             for (let name in result) {
                 var instance = this[name];
                 if (!instance) {
@@ -221,9 +226,11 @@
                     if (!moduleClass) {
                         continue;
                     }
-                    instance = new moduleClass;
-                    instance.channel = new ExtMessageChannel;
+                    instance = new moduleClass();
+                    instance.channel = new ExtMessageChannel();
                     this[name] = instance;
+                    this._mim.set(name, instance);
+                    this._cmim.set(name, instance);
                 }
             }
         },
@@ -257,11 +264,7 @@
                 map.set(this.generateKey(target, action, session.sID), session);
             }
             let ret = this._exec(session);
-            let value = this.parseCompactValue(ret);
-            if (value == null || value == undefined) {
-                return null;
-            }
-            return value;
+            return this.parseCompactValue(ret).value;
         },
         //session success
         _p : function (m) {

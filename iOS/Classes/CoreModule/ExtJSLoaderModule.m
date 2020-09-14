@@ -70,11 +70,7 @@ EXT_JS_METHOD_IMPLEMENT(installModule) {
             if (moduleNameSet.size == 0) {\
                 return true;\
             }\
-            for (let element of moduleNameSet) {\
-                console.log(\"element\"+ element);\
-            }\
             let result = ext._i(\"loader\", \"installModule\", Array.from(moduleNameSet));\
-            console.log(\"result:\" + result);\
             if (result == null || result == undefined) {\
                 console.error(\"InstallModuleError: failed with module [\" + Array.from(moduleNameSet) + \"]\");\
                 return false;\

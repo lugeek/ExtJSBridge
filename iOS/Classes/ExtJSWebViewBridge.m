@@ -135,7 +135,7 @@
     }
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    NSLog(@"timer start");
+    EXT_TIME_PROFILER_LAUNCH(sessionTimeProfiler);
     ExtJSSession *session = [ExtJSToolBox parseCompactSession:defaultText];
     if (!session) {
         completionHandler(ExtJSCompactValueFalse);
@@ -145,7 +145,7 @@
         if ([@"loadCore" isEqualToString:session[ExtJSSessionKeyAction]]) {
             id ret = [self loadCore];
             completionHandler([ExtJSToolBox compactValue:ret]);
-            NSLog(@"timer end");
+            EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"loadCore");
             return;
         }
         completionHandler(ExtJSCompactValueFalse);
@@ -167,7 +167,7 @@
         SEL selector = NSSelectorFromString([NSString stringWithFormat:@"%@:", session[ExtJSSessionKeyAction]]);
         id ret = [moduleInstance performSelector:selector withObject:session[ExtJSSessionKeyValue]];
         completionHandler([ExtJSToolBox compactValue:ret]);
-        NSLog(@"timer end");
+        EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
         return;
     }
     __weak WKWebView *weakWebView = webView;
@@ -206,13 +206,13 @@
         }
     };
     id ret = [moduleInstance performSelector:selector withObject:session[ExtJSSessionKeyValue] withObject:callback];
-    if (strcmp(signature.methodReturnType, @encode(void))) {
+    if (strcmp(signature.methodReturnType, @encode(void)) == 0) {
         completionHandler(ExtJSCompactValueTrue);
-        NSLog(@"timer end");
+        EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
         return;
     }
     completionHandler([ExtJSToolBox compactValue:ret]);
-    NSLog(@"timer end");
+    EXT_TIME_PROFILER_RECORD(sessionTimeProfiler, @"");
     #pragma clang diagnostic pop
 }
 

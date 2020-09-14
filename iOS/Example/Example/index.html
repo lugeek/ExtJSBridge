@@ -54,7 +54,7 @@
     <div class="line" onclick="platform()"><button>platform</button></div>
     
     <h1>NavigatorModule</h1>
-    <div class="line">page appear count : <span id="count">1</span></div>
+    <div class="line">page appear count : <span id="count">0</span></div>
     <div class="line" onclick="openPage()"><button>open</button></div>
     <div class="line" onclick="closePage()"><button>close</button></div>
     <div class="line" onclick="setTitle()"><button>setTitle</button></div>
@@ -78,7 +78,7 @@
             }
             return pwd;
         }
-        let appearCount = 1;
+        let appearCount = 0;
         console.log("loader :" + ext.loader);
         const env = ext.loader.requireModule("env");
         const navigator = ext.loader.requireModule("navigator");

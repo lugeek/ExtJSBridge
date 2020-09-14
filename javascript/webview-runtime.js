@@ -1,50 +1,55 @@
-class ExtMessage {
-    constructor(name, data){
-        this.name = name;
-        this.data = data;
-    }
-};
-class ExtMessageChannel {
-    constructor(){
-        this.map = new Map();
-    }
-    addListener(messageName, handler) {
-        let set = this.map.get(messageName);
-        if (!set) {
-            set = new Set();
-            this.map.set(messageName, set);
-        }
-        set.add(handler);
-    }
-    removeListener(messageName, handler) {
-        let set = this.map.get(messageName);
-        if (!set) {
-            return;
-        }
-        set.delete(handler);
-    }
-    removeListenerForMessageName(messageName) {
-        this.map.set(messageName, new Set());
-    }
-    post (messageName, value) {
-        value = ext.parseCompactValue(value).value;
-        let msg = new ExtMessage(messageName, value);
-        let set = this.map.get(messageName);
-        if (set == null || set == undefined) {
-            return;
-        }
-        set.forEach(function(handler) {
-            handler(msg);
-        });
-    }
-};
 (function(){
+    class ExtMessage {
+        constructor(name, data){
+            this.name = name;
+            this.data = data;
+        }
+    };
+    class ExtMessageChannel {
+        constructor(){
+            this.map = new Map();
+        }
+        addListener(messageName, handler) {
+            let set = this.map.get(messageName);
+            if (!set) {
+                set = new Set();
+                this.map.set(messageName, set);
+            }
+            set.add(handler);
+        }
+        removeListener(messageName, handler) {
+            let set = this.map.get(messageName);
+            if (!set) {
+                return;
+            }
+            set.delete(handler);
+        }
+        removeListenerForMessageName(messageName) {
+            this.map.set(messageName, new Set());
+        }
+        post (messageName, value) {
+            value = ext.parseCompactValue(value).value;
+            let msg = new ExtMessage(messageName, value);
+            let set = this.map.get(messageName);
+            if (set == null || set == undefined) {
+                return;
+            }
+            set.forEach(function(handler) {
+                handler(msg);
+            });
+        }
+    };
+    if (globalThis.ExtMessageChannel == null) {
+        globalThis.ExtMessageChannel = ExtMessageChannel;
+    }
     let bridge = {
         _sID : -1,
         //session map
         _sm : new Map(),
         //module Class Map
         _mcm : new Map(),
+        //core module instance Map
+        _cmim : new Map(),
         //module Instance Map
         _mim : new Map(),
         //compact Session Key List
@@ -102,10 +107,9 @@ class ExtMessageChannel {
             }
             return valueStr;
         }, 
-        //conver valueString to value
+        //convert valueString to value
         convertStringValue : function (valueType, string) {
             let decodeString = string;
-            console.log(decodeString);
             if (valueType == "S") {
                 return decodeString;
             } else if (valueType == "N") {
@@ -127,7 +131,6 @@ class ExtMessageChannel {
                 return object;
             } else if (valueType == 'O') {
                 let object = JSON.parse(decodeString);
-                console.log("object"+ Object.keys(object));
                 return object;
             }
             return string;
@@ -150,19 +153,16 @@ class ExtMessageChannel {
                     let key = this._cvkl[index];
                     let value = string.substring(start, i);
                     result[key] = value;
-                    console.log("key:" + key + "value:"+value);
                     index++;
                     start = i + 1;
                     if (index + 1 == this._cvkl.length) {
                         let key = this._cvkl[index];
                         let value = this.convertStringValue(result.valueType, string.substring(start));
-                        console.log("key:" + key + "value:"+Object.keys(value));
                         result[key] = value;
                         break;
                     }
                 }
             }
-            console.log("");
             return result;
         },
         compactSession : function (session) {
@@ -219,15 +219,12 @@ class ExtMessageChannel {
             }
             this._coreLoaded = true;
             let result = this._i("ext", "loadCore", null);
-            console.log("result :" + result.keys);
             var code = "";
             for (let name in result) {
-                console.log(name);
                 let item = result[name];
                 code += this._cimc(item, name);
             }
-            console.log(code);
-            this._globalObject.eval(code);
+            window.eval(code);
             for (let name in result) {
                 var instance = this[name];
                 if (!instance) {
@@ -235,9 +232,11 @@ class ExtMessageChannel {
                     if (!moduleClass) {
                         continue;
                     }
-                    instance = new moduleClass;
-                    instance.channel = new ExtMessageChannel;
+                    instance = new moduleClass();
+                    instance.channel = new ExtMessageChannel();
                     this[name] = instance;
+                    this._mim.set(name, instance);
+                    this._cmim.set(name, instance);
                 }
             }
         },
@@ -276,11 +275,7 @@ class ExtMessageChannel {
                 map.set(this.generateKey(target, action, session.sID), session);
             }
             let ret = this._exec("ext", this.compactSession(session));
-            let value = this.parseCompactValue(ret).value;
-            if (value == null || value == undefined) {
-                return null;
-            }
-            return value;
+            return this.parseCompactValue(ret).value;
         },
         //session success
         _p : function (s) {
