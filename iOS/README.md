@@ -86,7 +86,7 @@ Here a simple demo to help you start with ExtJSBridge and WKWebview
 
 ##### 0x2 Use Module 
 
-1. Import webview-runtime.min.js file at
+1. Import webview-runtime.min.js file
 
    ``` html
    //index.html
@@ -100,7 +100,7 @@ Here a simple demo to help you start with ExtJSBridge and WKWebview
    const env = ext.loader.requireModule("env");
    ```
 
-3. then you can call any method that exported form native!
+3. Call any method that exported form native!
 
    ``` html
    //index.html
