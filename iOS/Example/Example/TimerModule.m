@@ -46,6 +46,28 @@
     return self;
 }
 
+- (void)handleURLChanged:(NSURL *)URL {
+    [self cleanAllTiemr];
+}
+
+- (void)handleTimer:(NSTimer *)timer {
+    NSNumber *key = @([timer hash]);
+    ExtJSCallback callback = _timerDic[key][CALLBACK_KEY];
+    callback(ExtJSCallbackFunctionProgress, nil);
+}
+
+- (void)cleanAllTiemr {
+    for (NSString *key in _timerDic) {
+        NSTimer *timer = _timerDic[key][TIMER_KEY];
+        [timer invalidate];
+        timer = nil;
+    }
+}
+
+- (void)dealloc {
+    [self cleanAllTiemr];
+}
+
 EXT_JS_ASYNC_METHOD(setTimeout) {
     NSInteger second = [arg[@"millseconds"] integerValue] / 1000;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(second * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -76,20 +98,6 @@ EXT_JS_SYNC_METHOD(clearInterval) {
     timer = nil;
     _timerDic[arg] = nil;
     return nil;
-}
-
-- (void)handleTimer:(NSTimer *)timer {
-    NSNumber *key = @([timer hash]);
-    ExtJSCallback callback = _timerDic[key][CALLBACK_KEY];
-    callback(ExtJSCallbackFunctionProgress, nil);
-}
-
-- (void)dealloc {
-    for (NSString *key in _timerDic) {
-        NSTimer *timer = _timerDic[key][TIMER_KEY];
-        [timer invalidate];
-        timer = nil;
-    }
 }
 
 + (NSDictionary *)exportMethods {
