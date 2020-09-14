@@ -36,12 +36,12 @@ Here a simple demo to help you start with ExtJSBridge and WKWebview
    //EnvModule.m
    
    //sync method must have 1 argument and return value
-   - (id)platform:(id)arg {
+   EXT_JS_SYNC_METHOD(platform) {
      return "iOS";
    }
    
    //async method must have 2 arguments, return value is optional
-   - (void)networkType:(id)arg callback:(ExtJSCallback)callback {
+   EXT_JS_ASYNC_METHOD(networkType) {
      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
      	callback(ExtJSCallbackFunctionSuccess, "wifi");
      });
@@ -86,44 +86,51 @@ Here a simple demo to help you start with ExtJSBridge and WKWebview
 
 ##### 0x2 Use Module 
 
-1. Import webview-runtime.min.js file
+1. Import webview-runtime.min.js file at
 
-   ``` 
+   ``` html
+   //index.html
    <script type="text/javascript" src="webview-runtime.min.js"></script>
    ```
 
-2. Call ext.requireModule("env") to install the env module and create env module instance,then you can call any method that exported form native!
+2. Call ext.loader.requireModule("env") to install the env module and create env module instance
 
-``` html
-//index.html
+   ```javascript
+   //index.html
+   const env = ext.loader.requireModule("env");
+   ```
 
-<!DOCTYPE html>
-<html lang="en">
-<head></head>
-<body>
-    <script type="text/javascript" src="webview-runtime.min.js"></script>
-    <script>
-    const env = ext.requireModule("env");
-    
-    let platform = env.platform();
-    console.log("platform : " + platform);
-    
-    env.networkType({
-        onSuccess:function(res) {
-            console.log("network state : " + res);
-        }
-    });
-    </script>
-</body>
-</html>
-```
+3. then you can call any method that exported form native!
 
-the console will output：
+   ``` html
+   //index.html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head></head>
+   <body>
+       <script type="text/javascript" src="webview-runtime.min.js"></script>
+       <script>
+       const env = ext.loader.requireModule("env");
+       
+       let platform = env.platform();
+       console.log("platform : " + platform);
+       
+       env.networkType({
+           onSuccess:function(res) {
+               console.log("network state : " + res);
+           }
+       });
+       </script>
+   </body>
+   </html>
+   ```
 
-``` 
-platform : ios
-network state : wifi
-```
+4. Sarafi console will output：
+
+   ``` 
+   platform : ios
+   network state : wifi
+   ```
 
 ### Advanced Usage
 
