@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+    <title>ExtJSBridge</title>
+    <style>
+        h1 {
+            color: #333;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 200%;
+        }
+        h2, h3 {
+            color: #444;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: lighter;
+        }
+        body {
+            margin: 10px;
+        }
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        button {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #39495C;
+            color: white;
+            height: 30px;
+            width: 200px;
+            border-radius: 10px;
+            border: 0;
+        }
+        .line {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        #count {
+            color: #39495C;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #interval1000 {
+            color: #39495C;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #interval2000 {
+            color: #39495C;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>EnvModule</h1>
+    <div class="line" onclick="platformSync()"><button>platformSync</button></div>
+    <div class="line" onclick="platform()"><button>platform</button></div>
+    
+    <h1>NavigatorModule</h1>
+    <div class="line">page appear count : <span id="count">0</span></div>
+    <div class="line" onclick="openPage()"><button>open</button></div>
+    <div class="line" onclick="closePage()"><button>close</button></div>
+    <div class="line" onclick="setTitle()"><button>setTitle</button></div>
+    
+    <h1>TimerModule</h1>
+    <div class="line" onclick="alertAfter1Seconds()"><button>alertAfter1Seconds</button></div>
+    <div class="line">interval1000 : <span id="interval1000"></span></div>
+    <div class="line" onclick="setInterval1000()"><button>setInterval1000</button></div>
+    <div class="line">interval2000 : <span id="interval2000"></span></div>
+    <div class="line" onclick="setInterval2000()"><button>setInterval2000</button></div>
+    
+    <script type="text/javascript" src="webview-runtime.min.js"></script>
+    <script type="text/javascript">
+        function randomString(len) {
+            len = len < 8 ? len : 8;
+            let chars = 'ABCDEFGHJKMNPQRSTWXYZ';
+            let maxPos = chars.length;
+            let pwd = '';
+            for (i = 0; i < len; i++) {
+                pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+            }
+            return pwd;
+        }
+        let appearCount = 0;
+        console.log("loader :" + ext.loader);
+        const env = ext.loader.requireModule("env");
+        const navigator = ext.loader.requireModule("navigator");
+        const timer = ext.loader.requireModule("timer");
+        const alert = ext.loader.requireModule("alert");
+        
+        
+        let interval1000Count = 0;
+        let interval1000 = null;
+        let interval2000Count = 0;
+        let interval2000 = null;
+
+        navigator.channel.addListener("onPageAppear", function(res) {
+            document.getElementById("count").innerText = ++appearCount;
+        })
+        function platformSync() {
+            let res = env.platformSync();
+            alert.show({
+                title:"Platform",
+                message:res
+            });
+        }
+        function platform() {
+            env.platform({
+                onSuccess:function(res) {
+                    alert.show({
+                        title:"Platform",
+                        message:res
+                    });
+                }
+            });
+        }
+        function openPage() {
+            navigator.open('webview');
+        }
+        function closePage() {
+            navigator.close();
+        }
+        function setTitle() {
+            navigator.setTitle(randomString(8));
+        }
+        function alertAfter1Seconds() {
+            timer.setTimeout({
+                millseconds:1000,
+                onComplete:function(res){
+                    alert.show({
+                        title:"Finished",
+                        message:"Great!"
+                    });
+                }
+            })
+        }
+        function setInterval1000() {
+            if (interval1000 == null) {
+                interval1000 = timer.setInterval({
+                    millseconds:1000,
+                    onProgress:function(res) {
+                        document.getElementById("interval1000").innerText = ++interval1000Count;
+                    }
+                });
+            } else {
+                interval1000Count = 0;
+                document.getElementById("interval1000").innerText = 0;
+                timer.clearInterval(interval1000);
+                interval1000 = null;
+            }
+        }
+        function setInterval2000() {
+            if (interval2000 == null) {
+                interval2000 = timer.setInterval({
+                    millseconds:2000,
+                    onProgress:function(res) {
+                        document.getElementById("interval2000").innerText = ++interval2000Count;
+                    }
+                });
+            } else {
+                interval2000Count = 0;
+                document.getElementById("interval2000").innerText = 0;
+                timer.clearInterval(interval2000);
+                interval2000 = null;
+            }
+        }
+    </script>
+</body>
+</html>

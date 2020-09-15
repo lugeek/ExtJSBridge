@@ -1,0 +1,16 @@
+PODS:
+  - ExtJSBridge (0.0.3)
+
+DEPENDENCIES:
+  - ExtJSBridge (from `../../../ExtJSBridge`)
+
+EXTERNAL SOURCES:
+  ExtJSBridge:
+    :path: "../../../ExtJSBridge"
+
+SPEC CHECKSUMS:
+  ExtJSBridge: 2d43d177edb74dd9b694098b80c67f5bb0ed8e85
+
+PODFILE CHECKSUM: 8cf7a3b92aff0027f9086283bb19e729ae5cdca7
+
+COCOAPODS: 1.5.3
