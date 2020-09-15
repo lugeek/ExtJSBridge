@@ -1,5 +1,8 @@
 package com.pn_x.extjsbridge;
 
+import android.content.Context;
+
+import com.pn_x.extjsbridge.annotations.ExtActionJsImplement;
 import com.pn_x.extjsbridge.annotations.ExtAsyncAction;
 import com.pn_x.extjsbridge.annotations.ExtSyncAction;
 
@@ -7,6 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
@@ -177,24 +184,48 @@ public class ExtJSToolBox {
         return null;
     }
 
-    public static String getJSModuleClassCreator(Class<?> clz, String target) {
+    public static String getJSModuleClassCreator(Class<?> clz, String target, Context context) {
         Method[] methods = clz.getDeclaredMethods();
         StringBuilder funcs = new StringBuilder();
         for (final Method method : methods) {
             if (method.isAnnotationPresent(ExtAsyncAction.class)) {
                 ExtAsyncAction asyncAction = method.getAnnotation(ExtAsyncAction.class);
-                String actions[] = asyncAction.value();
-                for (String action : actions) {
-                    funcs.append(String.format("%s(arg){return ext._i(\"%s\",\"%s\",arg,%s)}",
-                            action, target, action, "false"));
+                String action = asyncAction.value();
+                if (method.isAnnotationPresent(ExtActionJsImplement.class)) {
+                    ExtActionJsImplement implement = method.getAnnotation(ExtActionJsImplement.class);
+                    String implementedJS = implement.value();
+                    if (implementedJS.isEmpty()) {
+                        String assetsPath = implement.assetsPath();
+                        if (!assetsPath.isEmpty()) {
+                            implementedJS = loadScriptFromAssets(assetsPath, context);
+                        }
+                    }
+                    if (!implementedJS.isEmpty()) {
+                        funcs.append(implementedJS);
+                        continue;
+                    }
                 }
+                funcs.append(String.format("%s(arg){return ext._i(\"%s\",\"%s\",arg,%s)}",
+                        action, target, action, "false"));
             } else if (method.isAnnotationPresent(ExtSyncAction.class)) {
                 ExtSyncAction syncAction = method.getAnnotation(ExtSyncAction.class);
-                String actions[] = syncAction.value();
-                for (String action : actions) {
-                    funcs.append(String.format("%s(arg){return ext._i(\"%s\",\"%s\",arg,%s)}",
-                            action, target, action, "true"));
+                String action = syncAction.value();
+                if (method.isAnnotationPresent(ExtActionJsImplement.class)) {
+                    ExtActionJsImplement implement = method.getAnnotation(ExtActionJsImplement.class);
+                    String implementedJS = implement.value();
+                    if (implementedJS.isEmpty()) {
+                        String assetsPath = implement.assetsPath();
+                        if (!assetsPath.isEmpty()) {
+                            implementedJS = loadScriptFromAssets(assetsPath, context);
+                        }
+                    }
+                    if (!implementedJS.isEmpty()) {
+                        funcs.append(implementedJS);
+                        continue;
+                    }
                 }
+                funcs.append(String.format("%s(arg){return ext._i(\"%s\",\"%s\",arg,%s)}",
+                        action, target, action, "true"));
             }
         }
         return String.format("class _ {%s}", funcs.toString());
@@ -213,4 +244,29 @@ public class ExtJSToolBox {
         return new ExtJSError(name == null ? "" : name, message == null ? "" : message, code);
     }
 
+    public static String loadScriptFromAssets(String assetPath, Context context) {
+        StringBuilder jscontent = new StringBuilder();
+        InputStream is = null;
+        try{
+            is = context.getAssets().open(assetPath);
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                jscontent.append(line);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return jscontent.toString();
+    }
 }

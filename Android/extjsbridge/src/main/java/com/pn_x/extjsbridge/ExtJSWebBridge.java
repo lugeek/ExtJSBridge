@@ -13,8 +13,6 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import com.pn_x.extjsbridge.module.ExtJSModule;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

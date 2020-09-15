@@ -1,4 +1,4 @@
-package com.pn_x.extjsbridge.module;
+package com.pn_x.extjsbridge;
 
 import android.content.Context;
 

@@ -51,9 +51,9 @@ public class ExtAsyncActionProcessor extends BaseProcessor {
 
             String methodName = executableElement.getSimpleName().toString();
             ExtAsyncAction asyncAction = element.getAnnotation(ExtAsyncAction.class);
-            String[] actions = asyncAction.value();
+            String action = asyncAction.value();
 
-            if (actions == null || actions.length <= 0) {
+            if (action == null || action.length() <= 0) {
                 error("ExtAsyncAction is empty for method: " + enclosingElement.toString());
             }
 

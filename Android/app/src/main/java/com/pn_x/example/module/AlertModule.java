@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class AlertModule {
 
-  @ExtAsyncAction({"show"})
+  @ExtAsyncAction("show")
   public void showAlert(Map<String, String> map, Context context) {
     if (context == null) {
       return;

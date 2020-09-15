@@ -8,9 +8,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD)
 @Retention(RUNTIME)
-@ExtActionVerify(
-        returnType = "java.lang.Object"
-)
-public @interface ExtSyncAction {
-    String value(); // action name
+public @interface ExtActionJsImplement {
+    String value() default ""; // javascript string
+    String assetsPath() default ""; // javascript file full name in assets
 }

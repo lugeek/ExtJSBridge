@@ -7,7 +7,7 @@ import com.pn_x.extjsbridge.ExtJSAsyncReply;
 import com.pn_x.extjsbridge.IExtJSBridge;
 import com.pn_x.extjsbridge.annotations.ExtAsyncAction;
 import com.pn_x.extjsbridge.annotations.ExtSyncAction;
-import com.pn_x.extjsbridge.module.ExtJSModule;
+import com.pn_x.extjsbridge.ExtJSModule;
 
 /**
  * Extends ExtJSModule is optional, it adds three features:

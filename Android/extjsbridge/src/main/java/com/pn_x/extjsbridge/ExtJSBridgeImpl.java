@@ -6,14 +6,12 @@ import android.os.Looper;
 
 import com.pn_x.extjsbridge.annotations.ExtAsyncAction;
 import com.pn_x.extjsbridge.annotations.ExtSyncAction;
-import com.pn_x.extjsbridge.module.ExtJSModule;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,8 +96,8 @@ public class ExtJSBridgeImpl {
         for (final Method method : methods) {
             if (method.isAnnotationPresent(ExtSyncAction.class)) {
                 ExtSyncAction syncAction = method.getAnnotation(ExtSyncAction.class);
-                String[] actionNames = syncAction.value();
-                if (Arrays.asList(actionNames).contains(message.action)) {
+                String actionName = syncAction.value();
+                if (actionName.equals(message.action)) {
                     Object[] args = getMethodArgs(method, true, value, message, bridgeImpl);
                     if (args.length <= 0) {
                         return method.invoke(instance);
@@ -109,8 +107,8 @@ public class ExtJSBridgeImpl {
                 }
             } else if (method.isAnnotationPresent(ExtAsyncAction.class)) {
                 ExtAsyncAction asyncAction = method.getAnnotation(ExtAsyncAction.class);
-                String[] actionNames = asyncAction.value();
-                if (Arrays.asList(actionNames).contains(message.action)) {
+                String actionName = asyncAction.value();
+                if (actionName.equals(message.action)) {
                     if (method.getReturnType() != Void.TYPE) {
                         Object[] args = getMethodArgs(method, false, value, message, bridgeImpl);
                         if (args.length <= 0) {
@@ -201,6 +199,9 @@ public class ExtJSBridgeImpl {
     }
 
     public boolean saveModuleCache(String target) {
+        if (moduleInstanceCache.containsKey(target)) {
+            return true;
+        }
         Class<?> clz = ExtJSModuleFactory.getsInstance().moduleClass(target);
         Object instance = null;
         if (clz != null) {

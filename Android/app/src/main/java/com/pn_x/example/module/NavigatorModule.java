@@ -9,7 +9,7 @@ import android.content.Intent;
 import com.pn_x.example.WebViewActivity;
 import com.pn_x.extjsbridge.IExtJSBridge;
 import com.pn_x.extjsbridge.annotations.ExtSyncAction;
-import com.pn_x.extjsbridge.module.ExtJSModule;
+import com.pn_x.extjsbridge.ExtJSModule;
 
 import java.lang.ref.WeakReference;
 
@@ -51,7 +51,7 @@ public class NavigatorModule extends ExtJSModule {
 
   @ExtSyncAction("setTitle")
   public boolean setTitle(String title, WebViewActivity activity) {
-    activity.setTitle(title);
+    activity.getSupportActionBar().setTitle(title);
     return true;
   }
 

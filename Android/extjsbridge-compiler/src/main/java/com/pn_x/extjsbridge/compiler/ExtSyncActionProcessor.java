@@ -51,9 +51,9 @@ public class ExtSyncActionProcessor extends BaseProcessor {
 
             String methodName = executableElement.getSimpleName().toString();
             ExtSyncAction syncAction = element.getAnnotation(ExtSyncAction.class);
-            String[] actions = syncAction.value();
+            String action = syncAction.value();
 
-            if (actions == null || actions.length <= 0) {
+            if (action == null || action.length() <= 0) {
                 error("ExtSyncAction is empty for method: " + enclosingElement.toString());
             }
 

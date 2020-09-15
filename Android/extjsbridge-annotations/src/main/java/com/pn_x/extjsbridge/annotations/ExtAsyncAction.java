@@ -12,5 +12,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returnType = "java.lang.Object"
 )
 public @interface ExtAsyncAction {
-    String[] value(); // action name
+    String value(); // action name
 }
